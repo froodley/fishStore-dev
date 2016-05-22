@@ -1,0 +1,14 @@
+[STORE]
+NAME = The Fish Store
+E-MAIL = admin@fishstore.default
+TIMEZONE = America/Chicago
+
+[DB]
+HOST = localhost
+USER = db_admin_uname
+PASSWORD = db_admin_password
+DB_NAME = fishStore
+ENCRYPT_ENTITIES = true
+
+[SETTINGS]
+MINIFY = true

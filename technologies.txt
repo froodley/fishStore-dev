@@ -1,0 +1,13 @@
+Technologies
+
+PHP is from-scratch REST-ful MVC architecture with DB-dynamic, encrypted, YAML-driven entity framework.  YAML parser is from-scratch.
+
+Front end uses generated HTML, Angular for data binding, jQuery and jQuery UI, and vector FontAwesome text icons for minimal graphic downloads
+
+MVC
+REST
+YAML Dynamic Entity Framework
+Angular
+jQuery
+jQuery UI
+FontAwesome

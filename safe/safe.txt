@@ -1,0 +1,6 @@
+IMPORTANT SAFETY NOTICE
+
+The safe needs to be locked down so that only your apache service user and
+appropriate administrators have access to it.  It will contain the cryptography key
+used by the application and other sensitive information.
+

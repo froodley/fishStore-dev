@@ -1,0 +1,47 @@
+DirectoryIndex /index.php
+
+# Block attempts to get the config files
+<Files config.ini*>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# If rewrite isn't available, show the internal
+# configuration error screen for all attempts except
+# index.php (handled there)
+<IfModule !mod_rewrite.c>
+ErrorDocument 404 /error.php
+</IfModule>
+
+# Block direct access to all other PHP files
+<Files *.php>
+    Order Deny,Allow
+    Deny from all
+</Files>
+
+<Files index.php>
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+<Files error.php>
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+
+# Rewrite rules
+<IfModule mod_rewrite.c>
+Options +FollowSymLinks
+RewriteEngine On 
+
+# Redirect index.php calls to MVC-style root URL
+RewriteCond %{THE_REQUEST} ^.*/index.php 
+RewriteRule index.php(.*) /$1 [R=301,L] 
+
+# Redirect all remaining calls to index.php internally for routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ /index.php?url=$1 [L,QSA,NC]
+
+</IfModule>
+
