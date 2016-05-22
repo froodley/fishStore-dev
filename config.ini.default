@@ -2,6 +2,7 @@
 NAME = The Fish Store
 E-MAIL = admin@fishstore.default
 TIMEZONE = America/Chicago
+URL = localhost
 
 [DB]
 HOST = localhost

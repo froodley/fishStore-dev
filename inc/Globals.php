@@ -1,6 +1,14 @@
 <?php
 
-//GLOBAL VARIABLES
+// CONSTANTS //
+
+define( 'JS_PATH', '/inc/js/' );
+define( 'CSS_PATH', '/inc/css/' );
+define( 'REQ_PATH', '/inc/req/' );
+define( 'IMG_PATH', '/inc/img/' );
+define( 'PROFILE_PATH', '/profile/' );
+
+// GLOBAL VARIABLES //
 /**
  * The file system path for the project
  * @global (string) $base_path
@@ -46,6 +54,33 @@ $entities		= [];
  * @global (array) $Envelope
  */
 $Envelope		= [];
+/**
+ * The array defining the site menus
+ * @global (array) $menu_items
+ */
+$menu_items = [
+				'Shop' =>
+				[
+					'Fish' => '/Fish',
+					'Bowls, Tanks & Aquariums' => '/Aquarium',
+					'Castles, Divers & Trees' => '/Decor',
+					'Pumps & Filters' => '/Pump',
+					'Fish Food' => '/Feed',
+					'Gravel, Water Conditioner, & Misc.' => '/Misc'
+				],
+				'Learn' =>
+				[
+					'Saltwater vs. Fresh' => '/Learn?WaterType' ,
+					'Common Diseases' => '/Learn?Diseases',
+					'Do Fish Drink Water?' => '/Learn?DoFishDrink'
+				],
+				'Account' =>
+				[
+					'My Profile' => '/Profile',
+					'My Cart' => '/Cart',
+					'Logout' => '/Logout'
+				]
+			];
 
 
 

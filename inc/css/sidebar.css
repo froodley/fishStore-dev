@@ -1,0 +1,46 @@
+#sidebar
+{
+	background-color: yellow; /*TODO*/
+}
+	
+nav.sidemenu
+{
+	line-height: 1em;
+	font-size: .8em;
+	border-radius: 10px; /* TODO add fallbacks */
+	border: 1px solid #DDD;
+	margin: 15px;
+}
+
+#sidemenu_ul, #sidemenu_ul ul
+{
+	list-style: none;
+	padding-left: 0px;
+}
+
+
+#sidemenu_ul > li
+{
+	padding: 8px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	font-weight: bolder;
+	border-bottom: 1px solid #DDD;
+	border-top: 1px solid #DDD;
+	background: #840; /*TODO*/
+}
+
+#sidemenu_ul > ul
+{
+	
+}
+
+#sidemenu_ul > ul > li
+{
+	padding: 3px 10px 10px 15px;
+}
+
+#sidemenu_ul > ul > li.menu_item_hover
+{
+	background-color: red; /*TODO*/
+}

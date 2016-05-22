@@ -51,8 +51,5 @@ spl_autoload_register( function ($fqcn)
 );
 
 
-require_once( $path . '\\view\\Shared\\Header.php' );
-require_once( $path . '\\view\\Shared\\Footer.php' );
-
 $app = new fishStore\App();
 $app->Start();

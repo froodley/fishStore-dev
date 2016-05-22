@@ -15,14 +15,14 @@ namespace fishStore\Base;
 abstract class View implements \fishStore\Interfaces\iView
 {
 	/**
-	 * Display
+	 * GetHTML
 	 *
 	 * Return a string of HTML for output of the view
 	 *
 	 * @param (Model) The data model for the view, if any
 	 * @return (string) The finished tag
 	 */
-	public function Display( \fishStore\Base\Model $model = null )
+	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
 		global $html, $Envelope;
 		
@@ -31,7 +31,8 @@ abstract class View implements \fishStore\Interfaces\iView
 		//$str = $html->div({ 'style' => "width:50%; margin 100px 25%;", 'id' => 'div_id' }, $var . ': ' . $data};
 
 		return '';
-	} // Display
+	} // GetHTML
+	
 	
 	/**
 	* GetDependencies

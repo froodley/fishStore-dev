@@ -3,6 +3,7 @@
 namespace fishStore\Util;
 
 define( 'HTML_ATTRIBS_FN', $GLOBALS['base_path'] . '\\etc\\CSV\\allowed_attribs.csv' );
+define( 'HTML_EVENT_ATTRIBS_FN', $GLOBALS['base_path'] . '\\etc\\CSV\\event_attribs.csv' );
 define( 'HTML_TAGS_FN', $GLOBALS['base_path'] . '\\etc\\CSV\\allowed_tags.csv' );
 define( 'HTML_VOID_TAGS_FN', $GLOBALS['base_path'] . '\\etc\\CSV\\void_tags.csv' );
 
@@ -26,6 +27,7 @@ class HTML
 {
 	// Allow inspection
 	public static $allowed_attribs = [];
+	public static $event_attribs = [];
 	public static $allowed_tags = [];
 	public static $void_tags = [];
 	
@@ -40,6 +42,9 @@ class HTML
 	public function __construct()
 	{
 		CSV::Load( self::$allowed_attribs, HTML_ATTRIBS_FN, 'HTML' );
+		CSV::Load( self::$event_attribs, HTML_EVENT_ATTRIBS_FN, 'HTML' );
+		self::$allowed_attribs = array_merge( self::$allowed_attribs, self::$event_attribs );
+		
 		CSV::Load( self::$allowed_tags, HTML_TAGS_FN, 'HTML' );
 		CSV::Load( self::$void_tags, HTML_VOID_TAGS_FN, 'HTML' );
 		

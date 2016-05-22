@@ -17,7 +17,7 @@ abstract class Controller implements \fishStore\Interfaces\iController
 	
 	public function GET( $id, $query)
 	{
-		return \fishStore\Factory\View::Make();
+		return \fishStore\Factory\ViewFactory::Make();
 		
 	}
 	

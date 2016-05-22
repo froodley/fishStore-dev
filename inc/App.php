@@ -65,7 +65,7 @@ class App
 		}
 		
 		// Spin up YAML entity classes
-		Factory\Entity::LoadEntities( $entities );
+		Factory\EntityFactory::LoadEntities( $entities );
 		if( !( count( $entities ) ) )
 		{
 			LogMessage('Error: Could not load entities');
@@ -189,8 +189,13 @@ class App
 			$query[$k] = $v;
 		}
 	
-		// Create and start Controller
-		
+		// Is this a logout request?
+		if( $controller_name == 'Logout' )
+			self::_logout();
+	
+	
+	
+		// Create and start Controller	
 		$controller_name = "\\fishStore\\Controller\\" . $controller_name;
 		
 		if( !class_exists( $controller_name ) )
@@ -229,6 +234,14 @@ class App
 		print $controller->$action_name( $id, $query );
 		
 	} // Start
+	
+	private static function _logout()
+	{
+		global $ini;
+		
+		header( "Location: http://{$ini['STORE']['URL']}" );
+		exit();
+	}
 	
 	
 	/**

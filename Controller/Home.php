@@ -19,8 +19,9 @@ class Home extends \fishStore\Base\Controller
 	public function GET( $id, $query)
 	{
 		global $Envelope;
-		$Envelope['lightning'] = "IT'S ALIVE!!!";
-		return \fishStore\Factory\View::Make();
+		
+		
+		return \fishStore\Factory\ViewFactory::Make();
 		
 	}
 	

@@ -3,16 +3,16 @@
 namespace fishStore\Factory;
 
 /**
- * View
+ * ViewFactory
  *
- * Factory\View creates and returns views
+ * ViewFactory creates and returns views
  *
  * @package    fishStore
  * @author     Pete Burkindine <pburkind@gmail.com>
  * @copyright  2016
  * @version    Release: 1.3
  */
-class View
+class ViewFactory
 {
 	/**
 	* Make
@@ -42,6 +42,7 @@ class View
 				$view_model = $name_or_model;
 		}
 		
+		// Check and instantiate View class
 		$class_name = 'fishStore\\View\\' . $view_space . '\\' . $view_name;
 		
 		$implements = class_implements( $class_name );
@@ -52,7 +53,7 @@ class View
 							"ViewFactory", $ini['STORE']['E-MAIL'] ) );
 		}
 		
-		// class_implements has already called spl_autoload_register, so there is no reason to require_once
+		# class_implements() has already called spl_autoload_register, so there is no reason to require_once
 		
 		$view = new $class_name();
 		
@@ -62,21 +63,9 @@ class View
 		// Populate the view-specific dependency lists
 		$Envelope['dependencies'] = $view->GetDependencies();
 		
-		if( !isset( $Envelope['dependencies'] ) )
-			$Envelope['dependencies'] = [ 'js' => [], 'css' => [] ];
-		elseif( !isset( $Envelope['dependencies']['js'] ) )
-			$Envelope['dependencies']['js'] = [];
-		elseif( !isset( $Envelope['dependencies']['css'] ) )
-			$Envelope['dependencies']['css'] = [];
-		
-		// Create the output HTML stream
-		$header = new \fishStore\View\Shared\Header();
-		$footer = new \fishStore\View\Shared\Footer();
-		
-		
-		$html = $header->Display() . $view->Display( $model ) . $footer->Display();
-		
-		return $html;
+		// Return the View
+		return $view->GetHTML();
+	
 	} // Make
 	
 	
@@ -102,4 +91,4 @@ class View
 	}
 	
 
-} // View
+} // ViewFactory

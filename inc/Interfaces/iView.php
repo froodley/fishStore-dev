@@ -15,14 +15,15 @@ namespace fishStore\Interfaces;
 interface iView
 {
 	/**
-	* Display
+	* GetHTML
 	*
 	* Return the HTML to display
 	*
 	* @param (fishStore\Base\Model) The data model used for the display, if any
 	* @return (string) The output HTML
 	*/
-	public function Display( \fishStore\Base\Model $model = null );
+	public function GetHTML( \fishStore\Base\Model $model = null );
+	
 	
 	/**
 	* GetDependencies

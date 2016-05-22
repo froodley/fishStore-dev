@@ -17,36 +17,49 @@ class Index extends \fishStore\Base\View
 {
 	
 	/**
-	 * Display
+	 * GetHTML
 	 *
 	 * Return the global page footer
 	 *
 	 * @param (Model) The data model for the view, if any
 	 * @return (string) The HTML
 	 */
-	public function Display( \fishStore\Base\Model $model = null )
+	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
-		global $html, $Envelope;
+		global $ini, $html, $Envelope, $menu_items;
 		
-		$out =	$html->div_beg( [ 'style' => 'width: 50%; margin-left: 25%; margin-top: 70px; text-align: center;' ] ) .
-				$html->span( [ 'style' => 'font-size: 25px; letter-spacing: .5em;' ], 'It\'s alive!' ) .
-				$html->br() . $html->br() .
-				$html->span( [ 'style' => 'font-size: 35px; color: red; letter-spacing: 1em;' ], $Envelope['lightning'] ) .
-				$html->br() . $html->br() .
-				$html->span( [ 'style' => 'font-size: 35px; color: red; letter-spacing: 1em;' ], $Envelope['lightning'] ) .
-				$html->br() . $html->br() .
-				$html->img(	[	'src' => 'https://kelleepratt.files.wordpress.com/2012/10/young-frankenstein.jpg',
-								'alt' => "Puttin' on the ritz..."
-							] ) .
-				$html->br() . $html->br() .
-				$html->_verbatim( [],
-								 '<iframe width="340" height="200" src="https://www.youtube.com/embed/w1FLZPFI3jc" frameborder="0" allowfullscreen></iframe>'
-								 ).
-				$html->div_end();
-
+		// Ensure dependency arrays exist
+		if( !isset( $Envelope['dependencies'] ) )
+			$Envelope['dependencies'] = [ 'js' => [], 'css' => [] ];
+		
+		if( !isset( $Envelope['dependencies']['js'] ) )
+			$Envelope['dependencies']['js'] = [];
+		elseif( !isset( $Envelope['dependencies']['css'] ) )
+			$Envelope['dependencies']['css'] = [];
+		
+		// Create the output HTML stream
+		$head = new \fishStore\View\Shared\Head();
+		$topbar = new \fishStore\Cell\Topbar();
+		$sidebar = new \fishStore\Cell\Sidebar();
+		$footer = new \fishStore\View\Shared\Footer();
+		
+		$Envelope['dependencies'] = array_merge( $Envelope['dependencies'], $footer->GetDependencies() );
+		
+		$out =	$head->GetHTML() . $topbar->GetHTML( $menu_items ) .
+				$html->div( ['id' => 'inner_wrapper'],
+					$sidebar->GetHTML( $menu_items ) .
+					$html->div( [ 'id' => 'main' ], $this->_getInnerHTML() )
+				) .
+				$footer->GetHTML();
+		
 		return $out;
-	} // Display
+	} // GetHTML
 	
-	public function GetDependencies() {}
+	private function _getInnerHTML()
+	{
+		$out = 'Home';
+		
+		return $out;
+	}
 	
 } // Index

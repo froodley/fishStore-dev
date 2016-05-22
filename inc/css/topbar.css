@@ -1,0 +1,64 @@
+
+#topbar
+{
+	
+}
+	
+header
+{
+	background: orange; /*TODO*/
+}
+
+#topmenu_wrapper
+{
+	overflow: hidden; /* wraps the floats */
+	background-color: blue; /*TODO*/
+	height: 40px !important;
+}
+
+nav.topmenu
+{
+	margin-left: 20%;
+	width: 60%;
+	height: 40px;
+	margin-top: 0px;
+}
+
+#topmenu_ul
+{
+	margin: 0px;
+	padding: 0px;
+}
+
+#topmenu_ul li
+{
+	list-style-type: none;
+}
+
+#topmenu_ul > li
+{
+	float: left;
+	width: 33%;
+	height: 40px;
+	padding-top: 5px;
+	background-color: #008; /*TODO*/
+	color: white;
+	font-size: 20px;
+	text-align: center;
+}
+
+#topmenu_ul > ul
+{
+	
+}
+
+#topmenu_ul > ul > li
+{
+	float: none;
+	display: none;
+}
+
+#topmenu_ul > li.menu_item_hover
+{
+	background-color: white !important; /*TODO*/
+}

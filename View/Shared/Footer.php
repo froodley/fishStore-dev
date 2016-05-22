@@ -15,28 +15,43 @@ namespace fishStore\View\Shared;
 class Footer extends \fishStore\Base\View
 {
 	/**
-	 * Display
+	 * GetHTML
 	 *
 	 * Return the global page footer
 	 *
 	 * @param (Model) The data model for the view, if any
 	 * @return (string) The HTML
 	 */
-	public function Display( \fishStore\Base\Model $model = null )
+	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
-		global $html, $Envelope;
+		global $ini, $html, $Envelope;
 		
 		$out = '';
 		
 		#TODO - The rest of the footer
+		$out .= $html->footer( [],
+								
+								$html->div( [ 'id' => 'copyright' ], '&copy;' . date('Y') . " {$ini['STORE']['NAME']}" )
+							 );
 		
 		// Close everything
-		$out .= $html->div_end() . $html->_comment( [], 'End Main' ) . $html->body_end() . $html->html_end();
+		$out .= $html->div_end() . $html->_comment( [], 'End Site Wrapper' ) . $html->body_end() . $html->html_end();
 		
 		return $out;
-	} // Display
+	} // GetHTML
 	
-	public function GetDependencies() {}
+	/**
+	* GetDependencies
+	*
+	* Add the css for the footer
+	*
+	* @return (array) The dependency MDA
+	*/
+	public function GetDependencies()
+	{
+		return [ 'css' => [ CSS_PATH . 'footer.css' ] ];
+		
+	} // GetDependencies
 	
 } // Footer
 

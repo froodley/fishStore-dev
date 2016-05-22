@@ -5,7 +5,7 @@ namespace fishStore\Factory;
 define( 'YAML_FN', $GLOBALS['base_path'] . '\\etc\\YAML\\db.yaml' );
 
 /**
- * Entity
+ * EntityFactory
  *
  * Dynamic entity framework; spins up classes for tables from YAML
  * INI setting encrypt_entities will cause the YAML to be RSA encrypted
@@ -15,9 +15,9 @@ define( 'YAML_FN', $GLOBALS['base_path'] . '\\etc\\YAML\\db.yaml' );
  * @copyright  2016
  * @version    Release: 1.3
  */
-class Entity
+class EntityFactory
 {
-	private static $_error_prefix = 'Error - Factory\\Entity.php :';
+	private static $_error_prefix = 'Error - EntityFactory.php :';
 	
 	/**
 	* LoadEntities
@@ -290,7 +290,7 @@ class Entity
 			return false;
 		}
 		
-		$fh = \fishStore\Util\File::OpenRead( $fn, 'Entity' );
+		$fh = \fishStore\Util\File::OpenRead( $fn, 'EntityFactory' );
 		if( !$fh )
 			return false;
 		
@@ -313,4 +313,4 @@ class Entity
 		return true;
 	} // _createTables
 	
-} // Entity
+} // EntityFactory

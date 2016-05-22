@@ -2,20 +2,17 @@
 
 namespace fishStore\View\Shared;
 
-define( 'JS_PATH', '/inc/js/' );
-define( 'CSS_PATH', '/inc/css/' );
-
 /**
- * Header
+ * Head
  *
- * The header HTML used by all templates
+ * The boilerplate HTML used by all templates
  *
  * @package    fishStore
  * @author     Pete Burkindine <pburkind@gmail.com>
  * @copyright  2016
  * @version    Release: 1.3
  */
-class Header extends \fishStore\Base\View
+class Head extends \fishStore\Base\View
 {
 	
 	private static $_required_js =	[
@@ -23,23 +20,28 @@ class Header extends \fishStore\Base\View
 										'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js',
 										'http://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js', #TODO: Write validators
 										'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js',
-										'https://use.fontawesome.com/bd3446476a.js',
-										JS_PATH . 'global.js'
+										REQ_PATH . 'font-awesome-4.6.3/css/font-awesome.min.css', // font-awesome's CDN is very slow
+										JS_PATH . 'global.js',
+										JS_PATH . 'menu.js',
+										JS_PATH . 'doc_ready.js'
 									];
 	
 	private static $_required_css =	[
-										CSS_PATH . 'global.css'
+										CSS_PATH . 'layout.css',
+										CSS_PATH . 'menu.css',
+										CSS_PATH . 'sidebar.css',
+										CSS_PATH . 'topbar.css'
 									];
 	
 	/**
-	 * Display
+	 * GetHTML
 	 *
 	 * Return a string of HTML for output of the view
 	 *
 	 * @param (Model) The data model for the view, if any
 	 * @return (string) The finished tag
 	 */
-	public function Display( \fishStore\Base\Model $model = null )
+	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
 		global $ini, $html, $Envelope;
 		
@@ -64,15 +66,12 @@ class Header extends \fishStore\Base\View
 		}
 		
 		$out .= $html->head_end();
-		$out .= $html->body_beg();
-		$out .= $html->div_beg( [ 'id' => 'main', 'class' => 'main' ] );
+		$out .= $html->body_beg() . $html->div_beg( [ 'id' => 'site_wrapper' ] );
 		
 		return $out;
 	
-	} // Display
+	} // GetHTML
 	
 	
-	public function GetDependencies() {}
 	
-	
-} // Header
+} // Head
