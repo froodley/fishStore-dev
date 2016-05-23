@@ -31,7 +31,7 @@ class App
 		
 		// Get params
 		Util\INI::Load( $ini, $base_path . '\\config.ini' );
-		if( !( count( $ini ) ) )
+		if( !( count( $ini ) ) || !self::_validateINI() )
 		{
 			LogMessage('Error: Could not load INI');
 			exit( sprintf( $internal_error, "The Fish Store", "INILoad", 'no_email@fishstore.default' ) );
@@ -86,8 +86,28 @@ class App
 	*/
 	public function Start()
 	{
-		global $base_path, $ini, $internal_error;
 		
+		// Route and continue
+		self::_route();
+		
+	} // Start
+	
+	
+	
+	/**
+	* _route
+	*
+	* Performs the routing
+	* Starts the appropriate controller and action
+	*
+	* @return (null)
+	*/
+	private static function _route()
+	{
+		#MINOR: Method is kind of long, should be split into pieces
+		
+		global $base_path, $ini, $internal_error;
+	
 		// Take apart the route
 		$request = trim($_SERVER['REQUEST_URI'], '/');
 		$orig_req = $request;
@@ -180,7 +200,10 @@ class App
 		}
 		$kvp = [];
 		if( strlen( $query ) )
+		{
+			$query = substr( $query, 1); // Remove the ?
 			$kvp = explode( ';', $query);
+		}
 			
 		$query = [];
 		foreach( $kvp as $pair )
@@ -232,17 +255,140 @@ class App
 		}
 		
 		print $controller->$action_name( $id, $query );
-		
-	} // Start
+	} // _route
 	
+	/**
+	* _validateINI
+	*
+	* Ensures appropriate values are used in key INI fields; populates others with defaults
+	*
+	* @return (boolean) The result
+	*/
+	private static function _validateINI()
+	{
+		global $ini, $default_ini, $base_path;
+		
+		$ini_error = 'INI validation error: %s failed validation for value %s';
+		
+		// Validate STORE
+		if( !isset( $ini['STORE'] ) )
+			$ini['STORE'] = [];
+		if( !isset( $ini['STORE']['NAME'] ) )
+			$ini['STORE']['NAME'] = $default_ini['STORE']['NAME'];
+		if( !isset( $ini['STORE']['MOTTO'] ) )
+			$ini['STORE']['MOTTO'] = $default_ini['STORE']['MOTTO'];
+		if( !isset( $ini['STORE']['E-MAIL'] ) )
+			$ini['STORE']['E-MAIL'] = $default_ini['STORE']['E-MAIL'];
+		if( !isset( $ini['STORE']['TIMEZONE'] ) )
+			$ini['STORE']['TIMEZONE'] = $default_ini['STORE']['TIMEZONE'];
+		if( !isset( $ini['STORE']['URL'] ) )
+			$ini['STORE']['URL'] = $default_ini['STORE']['URL'];
+		if( !isset( $ini['STORE']['LOGO'] ) )
+			$ini['STORE']['LOGO'] = $default_ini['STORE']['LOGO'];
+		
+		if(	!(\fishStore\Util\Is::WordString( $ini['STORE']['NAME'] ) ) )
+		{
+			LogMessage( sprintf( $ini_error, "['STORE']['NAME']", $ini['STORE']['NAME'] ) );
+			return false;
+		}
+		
+		if( !(\fishStore\Util\Is::Email( $ini['STORE']['E-MAIL'] ) ) )
+		{
+			LogMessage( sprintf( $ini_error, "['STORE']['E-MAIL']", $ini['STORE']['E-MAIL'] ) );
+			return false;
+		}
+		
+		if( !(\fishStore\Util\Is::TimeZoneString( $ini['STORE']['TIMEZONE'] ) ) )
+		{
+			LogMessage( sprintf( $ini_error, "['STORE']['TIMEZONE']", $ini['STORE']['TIMEZONE'] ) );
+			return false;
+		}
+		
+		if( !(\fishStore\Util\Is::URL( $ini['STORE']['URL'] ) ) )
+		{
+			LogMessage( sprintf( $ini_error, "['STORE']['URL']", $ini['STORE']['URL'] ) );
+			return false;
+		}
+		
+		if( !( file_exists( $base_path . $ini['STORE']['LOGO'] ) ) )
+		{
+			LogMessage( sprintf( $ini_error, "['STORE']['LOGO']", $ini['STORE']['LOGO'] ) );
+			return false;
+		}
+		
+		
+		// Validate DB
+		if(	!isset( $ini['DB'] )				||
+			!isset( $ini['DB']['HOST'] )		||
+			!isset( $ini['DB']['USER'] )		||
+			!isset( $ini['DB']['PASSWORD'] )	||
+			!isset( $ini['DB']['DB_NAME'] )
+		   )
+		{
+			return false;
+		}
+		if( !isset( $ini['DB']['ENCRYPT_ENTITIES'] ) )
+			$ini['DB']['ENCRYPT_ENTITIES'] = $default_ini['DB']['ENCRYPT_ENTITIES'];
+		
+		// Validate SETTINGS
+		if( !isset( $ini['SETTINGS'] ) )
+			$ini['SETTINGS'] = [];
+			
+		if( !isset( $ini['SETTINGS']['MINIFY'] ) )
+			$ini['SETTINGS']['MINIFY'] = $default_ini['SETTINGS']['MINIFY'];
+		
+		foreach( $ini as $section => $arr )
+		{
+			foreach( $arr as $k => $v )
+			{
+				if( $v === 'true' )
+					$ini[$section][$k] = true;
+				elseif( $v === 'false' )
+					$ini[$section][$k] = false;
+			}
+		}
+		
+		return true;
+	
+	} // _validateINI
+	
+	
+	/**
+	* _logout
+	*
+	* Destroy the session in PHP and on the SQL server for the login
+	* Re-route to the home page
+	*
+	* @return (null)
+	*/
 	private static function _logout()
 	{
-		global $ini;
+		global $ini, $dbh;
 		
-		header( "Location: http://{$ini['STORE']['URL']}" );
+		$url = '/';
+		
+		// Prevent anything being sent before the redirect header; destroy the session
+		ob_start();
+			$url = $ini['STORE']['URL'];
+			if( strpos( $url, 'http' ) !== 0 )
+				$url = 'http://' . $url;
+			
+			$session_id = $_COOKIE['PHPSESSID'];
+			if( $session_id )
+			{
+				preg_match( '/[0-9a-f]{32}/i', $session_id, $valid_id );
+				if( count( $valid_id ) )
+					$dbh->Delete( 'tbl_session', 'session_id = ?', $session_id );
+			}
+			
+			session_destroy();
+		ob_end_clean();
+		
+		// Redirect to the home page
+		header( "Location: $url" );
 		exit();
-	}
-	
+		
+	} // _logout
 	
 	/**
 	* __destruct

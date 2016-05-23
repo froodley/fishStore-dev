@@ -1,8 +1,10 @@
 [STORE]
 NAME = The Fish Store
+MOTTO = Fancy a fish?
 E-MAIL = admin@fishstore.default
 TIMEZONE = America/Chicago
 URL = localhost
+LOGO = /img/your_logo.png
 
 [DB]
 HOST = localhost

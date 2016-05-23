@@ -6,9 +6,100 @@
 	
 header
 {
-	background: orange; /*TODO*/
+	background: white; /*TODO*/
 }
 
+/* Topbar Layout */
+#store_logo_wrapper, #store_titlebar_wrapper, #topbar_divider
+{
+	float: left;
+}
+
+#account_contr_wrapper
+{
+	float: right;
+}
+
+/* Logo */
+#store_logo_wrapper
+{
+	padding: 0px;
+	margin: 0px;
+	height: 100%;
+}
+
+#store_logo
+{
+	height: 100%;
+	border: 0px;
+}
+
+/* Titlebar */
+#store_titlebar_wrapper
+{
+	height: 100%;
+	padding: 10px 8px 10px 50px;
+	margin: 0px;
+}
+
+#store_titlebar_title, #store_titlebar_motto
+{
+	display: block;
+}
+
+#store_titlebar_title
+{
+	font-size: 20px;
+	letter-spacing: .3em;
+	font-weight: 900;
+	text-shadow: 2px 1px #CCC;
+}
+
+#store_titlebar_motto
+{
+	padding-left: 20px;
+	font-size: 15px;
+	font-style: italic;
+}
+
+/* Topbar Divider */
+#topbar_divider
+{
+	color: grey; /* TODO */
+	padding: 10px 0px 10px 30px;
+}
+
+/* Account Controls */
+#account_contr_wrapper
+{
+	height: 100%;
+	padding-top: 15px;
+	margin: 0px;
+}
+
+#account_contr_wrapper i
+{
+	display: table-cell !important;
+	vertical-align: middle;
+}
+
+#topbar_profile, #topbar_logout
+{
+	display: block;
+	margin-bottom: 5px;
+}
+
+#topbar_profile_txt, #topbar_logout_txt
+{
+	display: table-cell;
+	vertical-align: middle;
+	padding: 0px 10px 0px 20px;
+	font-size: .7em;
+	font-style: italic;
+	line-height: 1.4em;
+}
+
+/* Top Menu */
 #topmenu_wrapper
 {
 	overflow: hidden; /* wraps the floats */
@@ -58,7 +149,7 @@ nav.topmenu
 	display: none;
 }
 
-#topmenu_ul > li.menu_item_hover
+#topmenu_ul > li.link_hover
 {
 	background-color: white !important; /*TODO*/
 }

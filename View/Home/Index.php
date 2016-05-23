@@ -43,19 +43,30 @@ class Index extends \fishStore\Base\View
 		$sidebar = new \fishStore\Cell\Sidebar();
 		$footer = new \fishStore\View\Shared\Footer();
 		
-		$Envelope['dependencies'] = array_merge( $Envelope['dependencies'], $footer->GetDependencies() );
-		
 		$out =	$head->GetHTML() . $topbar->GetHTML( $menu_items ) .
-				$html->div( ['id' => 'inner_wrapper'],
+				$html->div( ['id' => 'inner_wrapper', 'class' => 'clearfix'],
 					$sidebar->GetHTML( $menu_items ) .
-					$html->div( [ 'id' => 'main' ], $this->_getInnerHTML() )
+					$html->div(	[ 'id' => 'main_wrapper' ],
+								$html->div( [ 'id' => 'main' ],
+									$this->GetInnerHTML( $model )
+								)
+							)
 				) .
 				$footer->GetHTML();
 		
 		return $out;
 	} // GetHTML
 	
-	private function _getInnerHTML()
+	
+	/**
+	 * GetInnerHTML
+	 *
+	 * Just the inner contents of the #main div for the Home controller
+	 *
+	 * @param (Model) The data model for the view, if any
+	 * @return (string) The HTML
+	 */
+	public function GetInnerHTML( \fishStore\Base\Model $model = null )
 	{
 		$out = 'Home';
 		

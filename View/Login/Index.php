@@ -28,10 +28,21 @@ class Index extends \fishStore\Base\View
 	{
 		global $html, $Envelope;
 		
-		$out = 'Login';
+		$out = self::InjectDependencies( $Envelope['dependencies'] );
 		
+		$out .= "<span id='login_txt'>Login</span>";
 		return $out;
 	} // GetHTML
+	
+	
+	public function GetDependencies()
+	{
+		return
+		[
+			'js' => [ '/inc/js/Login.js' ],
+			'css' => [ '/inc/css/Login.css' ]
+		];
+	}
 	
 	
 } // Index

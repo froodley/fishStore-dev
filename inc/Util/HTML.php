@@ -15,6 +15,7 @@ define( 'HTML_VOID_TAGS_FN', $GLOBALS['base_path'] . '\\etc\\CSV\\void_tags.csv'
  *
  * Tag names with _beg or _end will generate just the beginning or end tag of a set.
  * Neither will use $contents; _beg will use the attribute array provided.
+ * The tag name nbsp will return an &nbsp;
  * The tag name _verbatim will return the contents verbatim inline ( for consistent use of $html ).
  * The tag name _comment will return the contents in an HTML comment.
  *
@@ -66,6 +67,7 @@ class HTML
 	 *
 	 * Generates a given HTML tag given its attributes and contents.  Tag names ending with _beg or _end will generate
 	 * only the beginning or end tag in a set.  _beg will use the provided attributes.
+	 * The tag name nbsp will return an &nbsp;
 	 * The tag name _verbatim will return the contents verbatim inline ( for consistent use of $html ).
 	 * The tag name _comment will return the contents in an HTML comment.
 	 *
@@ -77,7 +79,9 @@ class HTML
 	private function _generateTag( $tag_name, $attribs = [], $contents = null )
 	{
 		global $ini;
-		$minify = $ini['SETTINGS']['MINIFY'] === 'true' ? true : false; // Whether to include new lines for easy reading
+		
+		if( $tag_name == 'nbsp' )
+			return '&nbsp;';
 		
 		// Set if this is a begin- or end-only tag
 		$beg_tag = false; $end_tag = false;
@@ -137,7 +141,7 @@ class HTML
 		else
 			$tag = "<$tag_name" . "$attrib_str>$contents</$tag_name>";
 		
-		if( $minify )
+		if( $ini['SETTINGS']['MINIFY'] ) // Whether to include new lines for easy reading
 			$tag .= "\n";
 		
 		return $tag;

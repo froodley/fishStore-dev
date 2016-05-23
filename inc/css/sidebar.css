@@ -16,6 +16,7 @@ nav.sidemenu
 {
 	list-style: none;
 	padding-left: 0px;
+	word-wrap: break-word;
 }
 
 
@@ -40,7 +41,7 @@ nav.sidemenu
 	padding: 3px 10px 10px 15px;
 }
 
-#sidemenu_ul > ul > li.menu_item_hover
+#sidemenu_ul > ul > li.link_hover
 {
 	background-color: red; /*TODO*/
 }

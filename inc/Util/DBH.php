@@ -62,7 +62,11 @@ class DBH
 		
 		$dbh = $this->_dbh;
 		
-		if( !CheckSQL( $sql ) )
+		preg_match( '/FROM\s*(?!tbl_)/', $sql, $unsafe_from );
+		preg_match( '/JOIN\s*(?!tbl_)/', $sql, $unsafe_join );
+		
+		if( !CheckSQL( $sql ) || strpos( $sql, 'SELECT' ) !== 0 ||
+		   count( $unsafe_from ) || count( $unsafe_join ) )
 		{
 			LogMessage( sprintf( UNSAFE_ERROR, $sql ) );
 			return false;

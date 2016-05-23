@@ -34,5 +34,14 @@ interface iView
 	*/
 	public function GetDependencies();
 	
+	/**
+	* InjectDependencies
+	*
+	* When returning views through ajax that have dependencies, inject them through inline script tags
+	*
+	* @param (array) The dependencies array, must have 'js' and 'css'
+	* @return (string) The HTML to inject
+	*/
+	public static function InjectDependencies( $dependencies );
 	
 } // iView

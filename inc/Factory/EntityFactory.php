@@ -41,8 +41,7 @@ class EntityFactory
 			return;
 		
 		$entity_defs = [];
-		\fishStore\Util\YAML::Load( $entity_defs, YAML_FN,
-						 ( $ini['DB']['ENCRYPT_ENTITIES'] == 'true' ? true : false ) );
+		\fishStore\Util\YAML::Load( $entity_defs, YAML_FN, $ini['DB']['ENCRYPT_ENTITIES'] );
 		
 		
 		// Create classes
@@ -51,7 +50,7 @@ class EntityFactory
 			// Verify schema
 			if( !is_array( $members ) || strpos( $table_name, 'tbl_') != 0 )
 			{
-				LogMessage( "self::$_error_prefix Malformed entity definition for $table_name discarded." );
+				LogMessage( self::$_error_prefix . " Malformed entity definition for $table_name discarded." );
 				continue;
 			}
 			
@@ -65,7 +64,7 @@ class EntityFactory
 		
 		if( !count( $entities ) )
 		{
-			LogMessage( "self::$_error_prefix No entity classes were created." );
+			LogMessage( self::$_error_prefix . " No entity classes were created." );
 			return;
 		}
 		
@@ -95,7 +94,7 @@ class EntityFactory
 		{
 			if( is_array( $v ) )
 			{
-				LogMessage( "self::$_error_prefix Malformed entity member definition for $k discarded." );
+				LogMessage( self::$_error_prefix . " Malformed entity member definition for $k discarded." );
 				continue;
 			}
 			
@@ -117,7 +116,7 @@ class EntityFactory
 		$res = eval( $create_str );
 		
 		if( !$res )
-			LogMessage( "self::$_error_prefix Class creation failed for table $class_name." );
+			LogMessage( self::$_error_prefix . " Class creation failed for table $class_name." );
 		
 		self::_registerMethods( $class_name );
 		
@@ -163,7 +162,7 @@ class EntityFactory
 		$handle = $dbh->GetHandle();
 		if( !$handle )
 		{
-			LogMessage("self::$_error_prefix Could not retrieve the DBH handle when trying to update the entity definitions." );
+			LogMessage(self::$_error_prefix . " Could not retrieve the DBH handle when trying to update the entity definitions." );
 			return;
 		}
 		
@@ -174,7 +173,7 @@ class EntityFactory
 		$res = $handle->query( "SHOW TABLES" );
 		if ( !$res )
 		{
-			LogMessage( "self::$_error_prefix Could not retrieve the table list from the database. Err: #{$handle->errno} : {$handle->error}" );
+			LogMessage( self::$_error_prefix . " Could not retrieve the table list from the database. Err: #{$handle->errno} : {$handle->error}" );
 			return;
 		}
 		
@@ -188,7 +187,7 @@ class EntityFactory
 			$res = $handle->query( "SHOW TABLES" );
 			if ( !$res || $res->num_rows == 0 )
 			{
-				LogMessage( "self::$_error_prefix Could not retrieve the table list from the database. Err: #{$handle->errno} : {$handle->error}" );
+				LogMessage( self::$_error_prefix . " Could not retrieve the table list from the database. Err: #{$handle->errno} : {$handle->error}" );
 				return;
 			}
 		}
@@ -205,12 +204,12 @@ class EntityFactory
 		
 		if( count( $entity_defs ) == 0 )
 		{
-			LogMessage( "self::$_error_prefix Did not retrieve any entity definitions from the database. Err: #{$handle->errno} : {$handle->error}");
+			LogMessage( self::$_error_prefix . " Did not retrieve any entity definitions from the database. Err: #{$handle->errno} : {$handle->error}");
 			return;
 		}
 		
-		\fishStore\Util\YAML::Write( $entity_defs, YAML_FN,
-						  ( $ini['DB']['ENCRYPT_ENTITIES'] == 'true' ? true : false ) );
+		\fishStore\Util\YAML::Write( $entity_defs, YAML_FN, $ini['DB']['ENCRYPT_ENTITIES'] );
+		
 	} // _updateDefinitions
 	
 	
@@ -236,14 +235,14 @@ class EntityFactory
 		$res = $handle->query( $sql );
 		if( !$res || $res->num_rows != 1 )
 		{
-			LogMessage( "self::$_error_prefix Could not retrieve the primary key for table $table_name. Err: #{$handle->errno} : {$handle->error}" );
+			LogMessage( self::$_error_prefix . " Could not retrieve the primary key for table $table_name. Err: #{$handle->errno} : {$handle->error}" );
 			return;
 		}
 		$row = $res->fetch_assoc();
 		$pk = $row['Column_name'];
 		if( !strlen( $pk) )
 		{
-			LogMessage( "self::$_error_prefix Could not retrieve the primary key for table $table_name. Err: #{$handle->errno} : {$handle->error}" );
+			LogMessage( self::$_error_prefix . " Could not retrieve the primary key for table $table_name. Err: #{$handle->errno} : {$handle->error}" );
 			return;
 		}
 		
@@ -255,7 +254,7 @@ class EntityFactory
 		$res = $handle->query( $sql );
 		if( !$res || $res->num_rows == 0 )
 		{
-			LogMessage( "self::$_error_prefix Could not retrieve the column list for table $table_name. Err: #{$handle->errno} : {$handle->error}" );
+			LogMessage( self::$_error_prefix . " Could not retrieve the column list for table $table_name. Err: #{$handle->errno} : {$handle->error}" );
 			return;
 		}
 		
@@ -286,7 +285,7 @@ class EntityFactory
 		$fsize = filesize( $fn );
 		if( !file_exists( $fn ) || !$fsize )
 		{
-			LogMessage( "self::$_error_prefix Could not create tables; create_tables.sql not found or empty." );
+			LogMessage( self::$_error_prefix . " Could not create tables; create_tables.sql not found or empty." );
 			return false;
 		}
 		
@@ -306,7 +305,7 @@ class EntityFactory
 		
 		if ( !$create_res )
 		{
-			LogMessage( "self::$_error_prefix Could not create tables. Err: #{$handle->errno} : {$handle->error}" );
+			LogMessage( self::$_error_prefix . " Could not create tables. Err: #{$handle->errno} : {$handle->error}" );
 			return false;
 		}
 		

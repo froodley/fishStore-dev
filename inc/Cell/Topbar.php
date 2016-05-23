@@ -24,9 +24,48 @@ class Topbar extends \fishStore\Base\Cell
 	 */
 	public function GetHTML( $data = null )
 	{
-		global $html;
+		global $ini, $html;
 		
-		$out = $html->header( [], 'HEADER' );
+		// Display the header element
+		$out = $html->header(	[ 'class' => 'clearfix' ],
+							 
+								// Store Logo
+								$html->div( [ 'id' => 'store_logo_wrapper' ],
+									$html->a( [ 'onclick' => 'fishStore.Link( "/Home/?reload=1" );', 'href' => '#' ],
+										$html->img( [
+														'id' => 'store_logo',
+														'src' => $ini['STORE']['LOGO']
+													] )
+									)
+								) .
+								
+								//Store Title Bar
+								$html->div( [ 'id' => 'store_titlebar_wrapper' ],
+											$html->span( [ 'id' => 'store_titlebar_title' ], $ini['STORE']['NAME']) .
+											$html->span( [ 'id' => 'store_titlebar_motto' ], $ini['STORE']['MOTTO'])
+								) .
+								
+								//Topbar Divider
+								$html->div( [ 'id' => 'topbar_divider' ],
+											$html->i( [ 'class' => 'fa fa-ellipsis-v fa-3x' ] )
+								) .
+								
+								//Account Controls
+								( !isset( $_SESSION['usr'] ) ? '' :
+									$html->div( [ 'id' => 'account_contr_wrapper' ],
+												$html->a( [ 'id' => 'topbar_profile', 'onclick' => 'fishStore.Link( "/Profile" );' ],
+															$html->i( [ 'class' => 'fa fa-user' ] ) .
+															$html->span( [ 'id' => 'topbar_profile_txt' ],'Profile')
+														) .
+												$html->a( [ 'id' => 'topbar_logout',
+														   'onclick' => "window.location.replace( \"http://{$ini['STORE']['URL']}/Logout\" );" ],
+															$html->i( [ 'class' => 'fa fa-power-off' ] ) .
+															$html->span( [ 'id' => 'topbar_logout_txt' ],'Logout')
+														)
+									)
+								)
+							 
+							 );
 		
 		// Top Nav
 		$top_nav = new Menu\Top();

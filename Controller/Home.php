@@ -20,8 +20,15 @@ class Home extends \fishStore\Base\Controller
 	{
 		global $Envelope;
 		
+		$model = null;
 		
-		return \fishStore\Factory\ViewFactory::Make();
+		if( isset( $query['reload'] ) && $query['reload'] === '1' )
+		{
+			$view = new \fishStore\View\Home\Index();
+			return $view->GetInnerHTML();
+		}
+		
+		return \fishStore\Factory\ViewFactory::Make( $model );
 		
 	}
 	

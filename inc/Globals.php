@@ -70,18 +70,45 @@ $menu_items = [
 				],
 				'Learn' =>
 				[
-					'Saltwater vs. Fresh' => '/Learn?WaterType' ,
-					'Common Diseases' => '/Learn?Diseases',
-					'Do Fish Drink Water?' => '/Learn?DoFishDrink'
+					'Saltwater vs. Fresh' => '/Learn?What=WaterType' ,
+					'Common Diseases' => '/Learn?What=Diseases',
+					'Do Fish Drink Water?' => '/Learn?What=DoFishDrink'
 				],
 				'Account' =>
 				[
+					'Login/Register' => '/Login',
 					'My Profile' => '/Profile',
 					'My Cart' => '/Cart',
 					'Logout' => '/Logout'
 				]
 			];
-
+/**
+ * Default values for the INI
+ * @global (array) $default_ini
+ */
+$default_ini =	[
+					'STORE' =>
+					[
+						'NAME' => 'The Fish Store',
+						'MOTTO' => 'Fancy a fish?',
+						'E-MAIL' => 'no-email@fishstore.default',
+						'TIMEZONE' => 'America/Chicago',
+						'URL' => '/',
+						'LOGO' => '/inc/img/store_logo.jpg'
+					],
+					'DB' =>
+					[
+						'HOST' => 'localhost',
+						'USER' => 'db_admin_uname',
+						'PASSWORD' => 'db_admin_password',
+						'DB_NAME' => 'fishStore',
+						'ENCRYPT_ENTITIES' => true,
+					],
+					'SETTINGS' =>
+					[
+						'MINIFY' => true
+					]
+				];
 
 
 

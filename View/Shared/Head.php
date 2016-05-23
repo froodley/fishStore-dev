@@ -20,17 +20,19 @@ class Head extends \fishStore\Base\View
 										'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js',
 										'http://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js', #TODO: Write validators
 										'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js',
-										REQ_PATH . 'font-awesome-4.6.3/css/font-awesome.min.css', // font-awesome's CDN is very slow
 										JS_PATH . 'global.js',
-										JS_PATH . 'menu.js',
 										JS_PATH . 'doc_ready.js'
 									];
 	
 	private static $_required_css =	[
+										CSS_PATH . 'global.css',
+										CSS_PATH . 'clearfix.css',
 										CSS_PATH . 'layout.css',
 										CSS_PATH . 'menu.css',
 										CSS_PATH . 'sidebar.css',
-										CSS_PATH . 'topbar.css'
+										CSS_PATH . 'topbar.css',
+										CSS_PATH . 'footer.css',
+										REQ_PATH . 'font-awesome-4.6.3/css/font-awesome.min.css', // font-awesome's CDN is very slow
 									];
 	
 	/**

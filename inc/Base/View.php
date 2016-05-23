@@ -47,4 +47,41 @@ abstract class View implements \fishStore\Interfaces\iView
 		
 	} // GetDependencies
 	
-} // ViewName
+	/**
+	* InjectDependencies
+	*
+	* When returning views through ajax that have dependencies, inject them through inline script tags
+	*
+	* @param (array) The dependencies array, must have 'js' and 'css'
+	* @return (string) The HTML to inject
+	*/
+	final public static function InjectDependencies( $dependencies )
+	{
+		if( !is_array( $dependencies ) ||!isset( $dependencies['js'] ) || !isset( $dependencies['css'] ) )
+		{
+			LogMessage( 'Error: View::InjectDependencies did not receive a properly formatted array.' );
+			return;
+		}
+		
+		$out = '';
+		foreach( $dependencies['js'] as $js )
+		{
+			// jQuery won't work here, injecting the tag directly means the </script> tag for the inner script
+			// closes the outer
+			$out .=	"<script>" .
+						"var scr = document.createElement('script');" .
+						"scr.type = 'text/javascript';" .
+						"scr.src = '$js';" .
+						"$( 'head' ).append( scr );" .
+					"</script>";
+		}
+		
+		foreach( $dependencies['css'] as $css)
+		{
+			$out .=	"<script>$( 'head' ).append( $( '<link rel=\"stylesheet\" type=\"text/css\" href=\"$css\" />' ) );</script>";
+		}
+		return $out;
+	}
+	
+	
+} // View

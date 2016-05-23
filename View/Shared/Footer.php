@@ -40,18 +40,6 @@ class Footer extends \fishStore\Base\View
 		return $out;
 	} // GetHTML
 	
-	/**
-	* GetDependencies
-	*
-	* Add the css for the footer
-	*
-	* @return (array) The dependency MDA
-	*/
-	public function GetDependencies()
-	{
-		return [ 'css' => [ CSS_PATH . 'footer.css' ] ];
-		
-	} // GetDependencies
 	
 } // Footer
 

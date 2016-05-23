@@ -2,6 +2,8 @@
 
 // Establish basic application setup, the instantiate and start inc\App.php
 
+session_start();
+
 $path = dirname(__FILE__);
 require_once( $path . '\\inc\\internal_error.php');
 

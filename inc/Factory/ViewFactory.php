@@ -64,7 +64,7 @@ class ViewFactory
 		$Envelope['dependencies'] = $view->GetDependencies();
 		
 		// Return the View
-		return $view->GetHTML();
+		return $view->GetHTML( $model );
 	
 	} // Make
 	
