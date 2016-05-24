@@ -73,6 +73,9 @@ class App
 		}
 		
 		
+		session_start();
+		\fishStore\Util\Session::Restore();
+		
 	} // __construct
 	
 	
@@ -336,6 +339,8 @@ class App
 			
 		if( !isset( $ini['SETTINGS']['MINIFY'] ) )
 			$ini['SETTINGS']['MINIFY'] = $default_ini['SETTINGS']['MINIFY'];
+		if( !isset( $ini['SETTINGS']['SESSION_TIMEOUT'] ) || !is_int( $ini['SETTINGS']['SESSION_TIMEOUT'] ) )
+			$ini['SETTINGS']['SESSION_TIMEOUT'] = $default_ini['SETTINGS']['SESSION_TIMEOUT'];
 		
 		foreach( $ini as $section => $arr )
 		{
@@ -363,7 +368,7 @@ class App
 	*/
 	private static function _logout()
 	{
-		global $ini, $dbh;
+		global $ini;
 		
 		$url = '/';
 		
@@ -373,15 +378,8 @@ class App
 			if( strpos( $url, 'http' ) !== 0 )
 				$url = 'http://' . $url;
 			
-			$session_id = $_COOKIE['PHPSESSID'];
-			if( $session_id )
-			{
-				preg_match( '/[0-9a-f]{32}/i', $session_id, $valid_id );
-				if( count( $valid_id ) )
-					$dbh->Delete( 'tbl_session', 'session_id = ?', $session_id );
-			}
+			\fishStore\Util\Session::End();
 			
-			session_destroy();
 		ob_end_clean();
 		
 		// Redirect to the home page

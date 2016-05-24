@@ -18,6 +18,29 @@ class File {
 	
 	
 	/**
+	* OpenDir
+	*
+	* Opens a directory for reading
+	*
+	* @param (string) The path
+	* @param (string) The class name requesting the handle
+	* @return (object) The dirhandle or null
+	*/
+	public static function OpenDir( $path, $class )
+	{
+		$dh = opendir( $path );
+		if( !$dh )
+		{
+			LogMessage( sprintf( "%s.php could not open directory '%s'", $class, $path ) );
+			return null;
+		}
+		
+		return $dh;
+		
+	} // OpenDir
+	
+	
+	/**
 	* OpenRead
 	*
 	* Opens a file for reading

@@ -92,6 +92,9 @@ class EntityFactory
 		
 		foreach( $members as $k => $v )
 		{
+			if( $k == 'pk' )
+				continue;
+			
 			if( is_array( $v ) )
 			{
 				LogMessage( self::$_error_prefix . " Malformed entity member definition for $k discarded." );
@@ -100,8 +103,7 @@ class EntityFactory
 			
 			$create_str .= " public \${$k} = null;";
 		}
-		
-		
+				
 		// Code to implement dynamic 'inheritance' functionality
 		$create_str .=	' private static $method_arr = [];' .
 		
@@ -109,7 +111,7 @@ class EntityFactory
 						' { self::$method_arr[] = $method; return true; } return false; }' .
 						
 						' public function __call( $method, $args ) { if( in_array( $method, self::$method_arr ) )' .
-						' { return call_user_func_array( "fishStore\\\\Entity::" . $method, [$this]); } }' ;
+						' { return call_user_func_array( "fishStore\\\\Base\\\\Entity::" . $method, [$this]); } }' ;
 		
 		$create_str .= ' } return true;';
 		

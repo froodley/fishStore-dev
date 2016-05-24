@@ -25,7 +25,7 @@ class ViewFactory
 	*/
 	public static function Make( $name_or_model = null, fishStore\Model $model = null )
 	{
-		global $base_path, $internal_error, $ini, $Envelope;
+		global $base_path, $internal_error, $ini, $_ENVELOPE;
 		
 		// Get view name
 		$view_space = self::_getViewSpace();
@@ -58,10 +58,10 @@ class ViewFactory
 		$view = new $class_name();
 		
 		// Set title, etc.
-		$Envelope['title'] = $ini['STORE']['NAME'] . ' - ' . $view_space;
+		$_ENVELOPE['title'] = $ini['STORE']['NAME'] . ' - ' . $view_space;
 		
 		// Populate the view-specific dependency lists
-		$Envelope['dependencies'] = $view->GetDependencies();
+		$_ENVELOPE['dependencies'] = $view->GetDependencies();
 		
 		// Return the View
 		return $view->GetHTML( $model );

@@ -17,7 +17,7 @@ class Profile extends \fishStore\Base\Controller
 	
 	public function GET( $id, $query)
 	{
-		global $Envelope;
+		global $_ENVELOPE;
 		
 		
 		return \fishStore\Factory\ViewFactory::Make();

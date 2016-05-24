@@ -26,9 +26,9 @@ class Index extends \fishStore\Base\View
 	 */
 	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
-		global $html, $Envelope;
+		global $html, $_ENVELOPE;
 		
-		$out = self::InjectDependencies( $Envelope['dependencies'] );
+		$out = self::InjectDependencies( $_ENVELOPE['dependencies'] );
 		
 		$out .= $html->div( [ 'id' => 'reg_outer_wrapper' ],
 				$html->div( [ 'id' => 'reg_inner_wrapper' ],
@@ -38,10 +38,18 @@ class Index extends \fishStore\Base\View
 														'Register for an Account'
 													)
 								) .
-								$html->div( [ 'id' => 'req_lbl_row', 'class' => 'clearfix' ], 
-									$html->span( [ 'id' => 'reg_req_lbl', 'class' => 'required-lbl' ],
+								
+								( isset( $_ENVELOPE['reg_error'] ) ?
+									$html->div( [ 'id' => 'reg_error_row', 'class' => 'clearfix' ], 
+												$html->span( [ 'id' => 'reg_error', 'class' => 'error_lbl' ],
+																		$_ENVELOPE['reg_error']
+															)
+								) . $html->hr() : '' ).
+								
+								$html->div( [ 'id' => 'reg_req_lbl_row', 'class' => 'clearfix' ], 
+									$html->span( [ 'id' => 'reg_req_lbl', 'class' => 'required_lbl' ],
 															'* - Required'
-														)
+												)
 								) .
 								$html->form( [ 'id' => 'reg_form' ],
 												$html->div( ['id' => 'reg_fn_row', 'class' => 'clearfix' ],
@@ -193,8 +201,8 @@ class Index extends \fishStore\Base\View
 	{
 		return
 		[
-			'js' => [ '/inc/js/Register.js' ],
-			'css' => [ '/inc/css/Register.css' ]
+			'js' => [ '/View/Register/Register.js' ],
+			'css' => [ '/View/Register/Register.css' ]
 		];
 	}
 	

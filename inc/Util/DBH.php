@@ -4,7 +4,7 @@ namespace fishStore\Util;
 
 define( 'TABLE_NAME_ERROR', "SQL Error: Improper table name provided.  All tables have the format 'tbl' followed by only letters. Provided: %s");
 define( 'PREP_ERROR', "SQL Error: Couldn't prepare '%s'. Error: # %d - %s" );
-define( 'UNSAFE_ERROR', "SQL Error: A parameter was hard-coded; all parameters should be '?'. SQL: %s" );
+define( 'UNSAFE_ERROR', "SQL Error: The SQL passed was not safe.  No parameters can be hard-coded; all parameters should be '?'. SQL: %s" );
 
 
 /**
@@ -58,16 +58,19 @@ class DBH
 	*/
 	public function Select( $sql, $sql_prms )
 	{
-		#TODO: Make SQL builder for better safety
+		#MINOR: Make SQL builder?
 		
 		$dbh = $this->_dbh;
 		
-		preg_match( '/FROM\s*(?!tbl_)/', $sql, $unsafe_from );
-		preg_match( '/JOIN\s*(?!tbl_)/', $sql, $unsafe_join );
+		preg_match( '/FROM\s+(?!tbl_)/', $sql, $unsafe_from );
+		preg_match( '/JOIN\s+(?!tbl_)/', $sql, $unsafe_join );
 		
-		if( !CheckSQL( $sql ) || strpos( $sql, 'SELECT' ) !== 0 ||
+		if( !self::CheckSQL( $sql ) || strpos( $sql, 'SELECT' ) !== 0 ||
 		   count( $unsafe_from ) || count( $unsafe_join ) )
 		{
+			LogMessage( strpos( $sql, 'SELECT' ) . ',' . count( $unsafe_from ) . ',' . count( $unsafe_join ) . ',');
+			
+			
 			LogMessage( sprintf( UNSAFE_ERROR, $sql ) );
 			return false;
 		}
@@ -79,7 +82,7 @@ class DBH
 			return false;
 		}
 		
-		$this->BindParams( $sth, $args );
+		$this->_bindParams( $sth, $sql_prms );
 		
 		$sth->execute();
 		
@@ -99,10 +102,10 @@ class DBH
 	* Insert one or more rows into the provided table
 	*
 	* @param (string) The table name
-	* @param (array) An array or MDA representing the row or rows
-	* @return (var) Either false, or the number of rows inserted
+	* @param (array) A  MDA representing the row
+	* @return (boolean) The result
 	*/
-	public function Insert( $tbl, $rows )
+	public function Insert( $tbl, $row ) #MINOR: Make multi-insert, probably not needed with REST
 	{
 		$dbh = $this->_dbh;
 		
@@ -112,16 +115,28 @@ class DBH
 			return false;
 		}
 		
+		// Remove nulls
+		foreach( $row as $k => $v )
+		{
+			if( is_null( $v ) )
+				unset( $row[$k] );
+		}
+		
+		// Get the arrays
 		$cols = array_keys( $row );
 		$vals = array_values( $row );
+		
 		$cnt = count( $cols );
 		
+		//Write the keys
 		$sql = "INSERT INTO $tbl ( ";
 		for( $i = 0; $i < $cnt; $i++ )
 		{
 			$sql .= $cols[$i];
 			$sql .= ( $i < $cnt - 1 ) ? ', ' : ' ';
 		}
+		
+		// Write the param ?'s
 		$sql .= " ) VALUES ( ";
 		for( $i = 0; $i < $cnt; $i++ )
 		{
@@ -131,7 +146,8 @@ class DBH
 		
 		$sql .= ")";
 		
-		return $this->_execute( $sql, $vals, 'Insert' );
+		// Execute
+		return ( $this->_execute( $sql, $vals, 'Insert' ) === 1) ? $dbh->insert_id : false;
 		
 	} // Insert
 	
@@ -270,7 +286,7 @@ class DBH
 		
 		call_user_func_array( array( $sth, 'bind_param' ), $bind_prms );
 		
-	} // BindParams
+	} // _bindParams
 	
 	
 	/**

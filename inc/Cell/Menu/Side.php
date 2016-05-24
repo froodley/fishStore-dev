@@ -40,12 +40,10 @@ class Side extends \fishStore\Base\Cell
 				if( strpos( $id, 'Learn?What=' ) === 0 )
 					$id = substr( $id, strlen( 'Learn?What=' ) );
 				
-				$id = 'mi_' . strtolower( $id );
+				$id = 'si_' . strtolower( $id );
 				
 				$class = 'sidemenu_subitem menu_item';
-				
-				
-				if( in_array( $id, [ 'mi_profile', 'mi_cart', 'mi_logout' ] ) )
+				if( in_array( $id, [ 'si_profile', 'si_cart', 'si_logout', 'si_admin' ] ) )
 					$class .= ' hidden';
 				
 				$out .= $html->li(	[	'id'	=> $id,

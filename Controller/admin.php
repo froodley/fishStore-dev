@@ -3,16 +3,16 @@
 namespace fishStore\Controller;
 
 /**
- * Misc
+ * admin
  * 
- * The controller for the Misc section of the shop
+ * The controller for the admin
  *
  * @package    fishStore
  * @author     Pete Burkindine <pburkind@gmail.com>
  * @copyright  2016
  * @version    Release: 1.3
  */
-class Misc extends \fishStore\Base\Controller
+class admin extends \fishStore\Base\Controller
 {
 	
 	public function GET( $id, $query)
@@ -39,4 +39,4 @@ class Misc extends \fishStore\Base\Controller
 	{
 		GET( $id, $query );
 	}
-} // Misc
+} // admin

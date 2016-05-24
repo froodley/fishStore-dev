@@ -37,22 +37,27 @@ class Top extends \fishStore\Base\Cell
 			{
 				case 'Shop':
 					$url = '/Shop';
+					$id = 'ti_shop';
 					break;
 				case 'Learn':
 					$url = '/Learn';
+					$id = 'ti_learn';
 					break;
 				case 'Account':
 					$out .= $html->li( [
+								'id' => 'ti_profile',
 								'class' => 'topmenu_section_lbl menu_item hidden',
 								'onclick' => "fishStore.Link( \"/Profile\" );"
 								], 'My Profile' );
 					
 					$section = 'Login/Register';
 					$url = '/Login';
+					$id = 'ti_login';
 					break;
 			}
 			
 			$out .= $html->li( [
+								'id' => $id,
 								'class' => 'topmenu_section_lbl menu_item',
 								'onclick' => "fishStore.Link( \"$url\" );"
 								], $section );

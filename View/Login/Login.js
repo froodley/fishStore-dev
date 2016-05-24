@@ -7,11 +7,12 @@ fishStore.Login = {
 		{
 			$.ajax( {
 				type: "POST",
-				url: '/Register',
+				url: '/Login',
 				data: $("#login_form").serialize(),
 				success: function( data )
 				{
 					 $('#main').html( data );
+					 fishStore.Home.CheckLogin();
 				}
 			} );
 		}

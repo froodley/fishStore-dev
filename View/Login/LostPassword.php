@@ -1,25 +1,25 @@
 <?php
 
-namespace fishStore\View\Fish;
+namespace fishStore\View\Login;
 
 
 /**
- * Index
+ * LostPassword
  *
- * The main page for the Fish section
+ * The password retrieval view
  *
  * @package    fishStore
  * @author     Pete Burkindine <pburkind@gmail.com>
  * @copyright  2016
  * @version    Release: 1.3
  */
-class Index extends \fishStore\Base\View
+class LostPassword extends \fishStore\Base\View
 {
 	
 	/**
 	 * GetHTML
 	 *
-	 * Return the HTML for the Fish index view
+	 * Return the HTML for the Misc index view
 	 *
 	 * @param (Model) The data model for the view, if any
 	 * @return (string) The HTML
@@ -28,7 +28,7 @@ class Index extends \fishStore\Base\View
 	{
 		global $html, $_ENVELOPE;
 		
-		$out = 'Fish';
+		$out = 'Lost Password';
 		
 		return $out;
 	} // GetHTML

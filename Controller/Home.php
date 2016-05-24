@@ -18,13 +18,15 @@ class Home extends \fishStore\Base\Controller
 	
 	public function GET( $id, $query)
 	{
-		global $Envelope;
+		global $_ENVELOPE;
 		
 		$model = null;
 		
-		if( isset( $query['reload'] ) && $query['reload'] === '1' )
+		if(	isset( $_ENVELOPE['login_success'] ) ||
+			( isset( $query['reload'] ) && $query['reload'] === '1' ) )
 		{
 			$view = new \fishStore\View\Home\Index();
+			$_ENVELOPE['dependencies'] = $view->GetDependencies();
 			return $view->GetInnerHTML();
 		}
 		

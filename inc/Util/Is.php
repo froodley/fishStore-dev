@@ -20,11 +20,37 @@ class Is
 	//	return count( $matches ) > 0;
 	//}
 	
-	
-	public static function WordString( $string )
+	public static function FirstLastName( $string )
 	{
-		preg_match( '/[^A-Za-z0-9\ \-\!\,\.\:\'\"\?]+/', $string, $matches);
-		return count( $matches ) > 0 ? false : true;
+		preg_match( '/^[A-Za-z\'\-]{2,}$/', $string, $matches);
+		return count( $matches ) > 0;
+	}
+	
+	public static function MiddleInitial( $string )
+	{
+		preg_match( '/^[A-Z]$/', $string, $matches);
+		return count( $matches ) > 0;
+	}
+	
+	
+	public static function ValidPassword( $string )
+	{
+		//'Passwords must:<br/><ul>' +
+		//'<li>Be 8-15 characters long</li>' +
+		//'<li>Begin with a letter</hr/li>' +
+		//'<li>Contain at least one digit or special character</li>' +
+		//'<li>Contain at least one upper-case and one lower-case letter</li>' +
+		//'<li>Consist of only letters, numbers, and the characters #, !, $, and %</li></ul>'
+		
+		preg_match( '/(?!^[0-9]*$)(?!^[a-z]*$)(?!^[A-Z]*$)^[a-zA-Z][a-zA-Z0-9\#\!\$\%]{7,14}$/',
+				   $string, $matches);
+		return count( $matches ) > 0;
+	}
+	
+	public static function USPhone( $string )
+	{
+		preg_match( '/((\([2-9]{3}\)( |-)?)|([2-9]{3}-))\d{3}-\d{4}/', $string, $matches);
+		return count( $matches ) > 0;
 	}
 	
 	public static function Email( $string )
@@ -48,5 +74,66 @@ class Is
 		preg_match( '/[A-Z][A-Za-z]+\/[A-Z][A-Za-z]+/', $string, $matches);
 		return count( $matches ) > 0;
 	}
+	
+	public static function DateString( $string )
+	{
+		$success = false;
+		
+		//mm-dd-YYYY
+		preg_match( '/^(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])-\d{4}$/', $string, $matches);
+		$success |= count( $matches ) > 0;
+		//dd-mm-YYYY
+		preg_match( '/^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-\d{4}$/', $string, $matches);
+		$success |= count( $matches ) > 0;
+		//YYYY-mm-dd
+		preg_match( '/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/', $string, $matches);
+		$success |= count( $matches ) > 0;
+		
+		return $success;
+	}
+	
+	public static function WordString( $string )
+	{
+		preg_match( '/[^A-Za-z0-9\ \-\!\,\.\:\'\"\?]+/', $string, $matches);
+		return count( $matches ) > 0 ? false : true;
+	}
+	
+	public static function Image( $file )
+	{
+		$info = getimagesize( $file['tmp_name'] );
+		
+		if ($info === false)
+			return false;
+		
+		if (	$info[2] !== IMAGETYPE_GIF  &&
+				$info[2] !== IMAGETYPE_JPEG &&
+				$info[2] !== IMAGETYPE_PNG)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
+	* TF
+	*
+	* Upgraded is_bool that can detect case-insensitive 'True' and 'False'
+	*
+	* @param (var) The value to check
+	* @return (boolean) The result
+	*/
+	function TF( $val )
+	{
+		if( !is_string( $val ) )
+			return is_bool( $val );
+		
+		$lower = strtolower( $val );
+		if( $lower == 'true' || $lower == 'false' )
+			return true;
+		else
+			return false;
+		
+	} // TF
 	
 } // Is

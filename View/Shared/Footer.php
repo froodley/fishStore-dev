@@ -24,7 +24,7 @@ class Footer extends \fishStore\Base\View
 	 */
 	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
-		global $ini, $html, $Envelope;
+		global $ini, $html, $_ENVELOPE;
 		
 		$out = '';
 		

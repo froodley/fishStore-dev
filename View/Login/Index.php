@@ -26,9 +26,9 @@ class Index extends \fishStore\Base\View
 	 */
 	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
-		global $html, $Envelope;
+		global $html, $_ENVELOPE;
 		
-		$out = self::InjectDependencies( $Envelope['dependencies'] );
+		$out = self::InjectDependencies( $_ENVELOPE['dependencies'] );
 		
 		$out .= $html->div( [ 'id' => 'login_wrapper' ],
 								$html->div( [ 'id' => 'login_header', 'class' => 'clearfix' ] ,
@@ -43,6 +43,14 @@ class Index extends \fishStore\Base\View
 																)
 													)
 								) .
+								
+								( isset( $_ENVELOPE['login_error'] ) ?
+									$html->div( [ 'id' => 'login_error_row', 'class' => 'clearfix' ], 
+												$html->span( [ 'id' => 'login_error', 'class' => 'error_lbl' ],
+																		$_ENVELOPE['login_error']
+															)
+								) . $html->hr() : '' ).
+								
 								$html->form( [ 'id' => 'login_form' ],
 												$html->div( ['id' => 'login_usr_row', 'class' => 'clearfix' ],
 													$html->label( [	'for' => 'login_usr',
@@ -94,8 +102,8 @@ class Index extends \fishStore\Base\View
 	{
 		return
 		[
-			'js' => [ '/inc/js/Login.js' ],
-			'css' => [ '/inc/css/Login.css' ]
+			'js' => [ '/View/Login/Login.js' ],
+			'css' => [ '/View/Login/Login.css' ]
 		];
 	}
 	

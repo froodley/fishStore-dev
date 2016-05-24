@@ -21,19 +21,19 @@ class Head extends \fishStore\Base\View
 										'http://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js',
 										'http://cdn.jsdelivr.net/jquery.validation/1.15.0/additional-methods.min.js',
 										'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js',
-										JS_PATH . 'shared/global.js',
-										JS_PATH . 'shared/doc_ready.js',
-										JS_PATH . 'shared/validators.js'
+										JS_PATH . 'global.js',
+										JS_PATH . 'doc_ready.js',
+										JS_PATH . 'validators.js'
 									];
 	
 	private static $_required_css =	[
-										CSS_PATH . 'shared/global.css',
-										CSS_PATH . 'shared/clearfix.css',
-										CSS_PATH . 'shared/layout.css',
-										CSS_PATH . 'shared/menu.css',
-										CSS_PATH . 'shared/sidebar.css',
-										CSS_PATH . 'shared/topbar.css',
-										CSS_PATH . 'shared/footer.css',
+										CSS_PATH . 'global.css',
+										CSS_PATH . 'clearfix.css',
+										CSS_PATH . 'layout.css',
+										CSS_PATH . 'menu.css',
+										CSS_PATH . 'sidebar.css',
+										CSS_PATH . 'topbar.css',
+										CSS_PATH . 'footer.css',
 										REQ_PATH . 'font-awesome-4.6.3/css/font-awesome.min.css', // font-awesome's CDN is very slow
 									];
 	
@@ -47,13 +47,13 @@ class Head extends \fishStore\Base\View
 	 */
 	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
-		global $ini, $html, $Envelope;
+		global $ini, $html, $_ENVELOPE;
 		
-		$arr_js = array_merge( self::$_required_js, $Envelope['dependencies']['js'] );
-		$arr_css = array_merge( self::$_required_css, $Envelope['dependencies']['css'] );
+		$arr_js = array_merge( self::$_required_js, $_ENVELOPE['dependencies']['js'] );
+		$arr_css = array_merge( self::$_required_css, $_ENVELOPE['dependencies']['css'] );
 		
 		$out = "<!DOCTYPE html>\n".$html->html_beg() . $html->head_beg();
-		$out .= $html->title([], $Envelope['title'] );
+		$out .= $html->title([], $_ENVELOPE['title'] );
 		
 		foreach( $arr_js as $js )
 			$out .= $html->script(	[

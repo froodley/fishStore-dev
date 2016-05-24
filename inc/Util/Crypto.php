@@ -50,6 +50,7 @@ class Crypto
 			return null;
 	} // _construct
 	
+	
 	/**
 	* Encrypt
 	*

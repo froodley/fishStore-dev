@@ -1,0 +1,9 @@
+#welcome_message
+{
+	display: block;
+	padding-bottom: 30px;
+	padding-left: 15px;
+	font-style: italic;
+	font-size: .9em;
+	color: red; /* TODO */
+}

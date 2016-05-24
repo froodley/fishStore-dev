@@ -51,9 +51,9 @@ $dbh			= null;
 $entities		= [];
 /**
  * The envelope used to pass miscellaneous data from the controller to the View
- * @global (array) $Envelope
+ * @global (array) $_ENVELOPE
  */
-$Envelope		= [];
+$_ENVELOPE		= [];
 /**
  * The array defining the site menus
  * @global (array) $menu_items
@@ -77,6 +77,7 @@ $menu_items = [
 				'Account' =>
 				[
 					'Login/Register' => '/Login',
+					'Admin' => '/admin',
 					'My Profile' => '/Profile',
 					'My Cart' => '/Cart',
 					'Logout' => '/Logout'
@@ -106,7 +107,8 @@ $default_ini =	[
 					],
 					'SETTINGS' =>
 					[
-						'MINIFY' => true
+						'MINIFY' => true,
+						'SESSION_TIMEOUT' => 60
 					]
 				];
 
@@ -136,44 +138,23 @@ function LogMessage( $msg )
 	
 } // LogMessage
 
+
 /**
-* HandleErrors
+* GetFML
 *
-* General purpose error handler
+* Get a user's name as First M. Last
 *
-* @param (enum) Error level
-* @param (string) Error message
-* @param (string) Error filename
-* @param (int) Error line number
-* @param (array) Error context
-* @return (null)
+* @param (fishStore\Entity\User) The user object
+* @return (string) The FML
 */
-function HandleErrors( $lvl, $msg, $file, $ln, $context )
+function GetFML( $usr )
 {
-	global $ini, $internal_error;
-	echo count($ini);
-	$lvl_str = '';
-	switch( $lvl )
-	{
-		case E_USER_ERROR:
-			$lvl_str = 'E_USER_ERROR';
-			break;
-		case E_RECOVERABLE_ERROR:
-			$lvl_str = 'E_RECOVERABLE_ERROR';
-			break;
-		case E_STRICT:
-			$lvl_str = 'E_STRICT';
-			break;
-		default:
-			return true;
-	}
+	return	$usr->usr_first_name . ' ' .
+			( $usr->usr_middle_init ? $usr->usr_middle_init . '. ' : '' ) .
+			$usr->usr_last_name;
 	
-	$context = ArrayToStr( $context );
-	LogMessage( "PHP Error: $lvl_str - File:'$file'ln$ln - $msg.\nContext: $context" );
-	echo( sprintf( $internal_error, ( $ini['STORE']['NAME'] ? $ini['STORE']['NAME'] : 'The Fish Store' ) ,
-				  "General Error #{$lvl_str}", ( $ini['STORE']['NAME'] ? $ini['STORE']['NAME'] : 'no_email@fishstore.default' ) ) );
-	return false;
-} // HandleErrors
+} // GetFML
+
 
 /**
 * HandleFatals
@@ -241,7 +222,7 @@ function ArrayToStr( $arr, $str = '', $depth = 0, $is_last = true )
 			$str = ArrayToStr( $v, $str, $depth + 1, ( $i == $cnt - 1) );
 		else
 		{
-			$v = ( is_numeric( $v ) || CheckBool( $v ) ? $v : "'$v'" );
+			$v = ( is_numeric( $v ) || \fishStore\Util\Is::TF( $v ) ? $v : "'$v'" );
 			$str .= ( $i < $cnt - 1) ? "$v, " : "$v ";
 		}
 		
@@ -254,26 +235,6 @@ function ArrayToStr( $arr, $str = '', $depth = 0, $is_last = true )
 
 } // ArrayToStr
 
-/**
-* CheckBool
-*
-* Upgraded is_bool that can detect case-insensitive 'True' and 'False'
-*
-* @param (var) The value to check
-* @return (boolean) The result
-*/
-function CheckBool( $val )
-{
-	if( !is_string( $val ) )
-		return is_bool( $val );
-	
-	$lower = strtolower( $val );
-	if( $lower == 'true' || $lower == 'false' )
-		return true;
-	else
-		return false;
-	
-} // CheckBool
 
 
 // REFLECTION //
@@ -327,3 +288,6 @@ function GetClassMembers( $class_name )
 	return $class_members;
 	
 } // GetClassMembers
+
+
+

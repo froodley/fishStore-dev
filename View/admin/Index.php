@@ -1,12 +1,12 @@
 <?php
 
-namespace fishStore\View\Fish;
+namespace fishStore\View\admin;
 
 
 /**
  * Index
  *
- * The main page for the Fish section
+ * The main page for admin interface
  *
  * @package    fishStore
  * @author     Pete Burkindine <pburkind@gmail.com>
@@ -19,7 +19,7 @@ class Index extends \fishStore\Base\View
 	/**
 	 * GetHTML
 	 *
-	 * Return the HTML for the Fish index view
+	 * Return the HTML for the admin interface
 	 *
 	 * @param (Model) The data model for the view, if any
 	 * @return (string) The HTML
@@ -28,7 +28,7 @@ class Index extends \fishStore\Base\View
 	{
 		global $html, $_ENVELOPE;
 		
-		$out = 'Fish';
+		$out = 'admin';
 		
 		return $out;
 	} // GetHTML

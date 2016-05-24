@@ -26,16 +26,16 @@ class Index extends \fishStore\Base\View
 	 */
 	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
-		global $ini, $html, $Envelope, $menu_items;
+		global $ini, $html, $_ENVELOPE, $menu_items;
 		
 		// Ensure dependency arrays exist
-		if( !isset( $Envelope['dependencies'] ) )
-			$Envelope['dependencies'] = [ 'js' => [], 'css' => [] ];
+		if( !isset( $_ENVELOPE['dependencies'] ) )
+			$_ENVELOPE['dependencies'] = [ 'js' => [], 'css' => [] ];
 		
-		if( !isset( $Envelope['dependencies']['js'] ) )
-			$Envelope['dependencies']['js'] = [];
-		elseif( !isset( $Envelope['dependencies']['css'] ) )
-			$Envelope['dependencies']['css'] = [];
+		if( !isset( $_ENVELOPE['dependencies']['js'] ) )
+			$_ENVELOPE['dependencies']['js'] = [];
+		elseif( !isset( $_ENVELOPE['dependencies']['css'] ) )
+			$_ENVELOPE['dependencies']['css'] = [];
 		
 		// Create the output HTML stream
 		$head = new \fishStore\View\Shared\Head();
@@ -68,9 +68,40 @@ class Index extends \fishStore\Base\View
 	 */
 	public function GetInnerHTML( \fishStore\Base\Model $model = null )
 	{
+		global $_ENVELOPE, $html;
+		
 		$out = 'Home';
 		
+		// Create the login marker
+		if( isset( $_SESSION['usr'] ) )
+		{
+			$usr_name =	GetFML( $_SESSION['usr'] );
+			$is_login =	isset( $_ENVELOPE[ 'login_success' ] ) ? '1' : '0';
+			$is_reg =	isset( $_ENVELOPE[ 'reg_success' ] ) ? '1' : '0';
+			$is_admin =	$_SESSION['usr']->usr_is_admin ? '1' : '0';
+			
+			// NOTE: Even if the user sets these attributes and fires the JS,
+			// security will not allow them into admin
+			$out .= $html->input(	[
+										'type' => 'hidden', 'id' => 'logged_in',
+										'data-user-fml' => $usr_name ,
+										'data-is-login' => $is_login ,
+										'data-is-reg' => $is_reg,
+										'data-is-admin' => $is_admin
+									]
+								);
+		}
+		
 		return $out;
+	}
+	
+	public function GetDependencies()
+	{
+		return
+		[
+			'js' => [ '/View/Home/Home.js' ],
+			'css' => [ '/View/Home/Home.css' ]
+		];
 	}
 	
 } // Index

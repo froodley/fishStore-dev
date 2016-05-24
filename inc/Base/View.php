@@ -24,9 +24,9 @@ abstract class View implements \fishStore\Interfaces\iView
 	 */
 	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
-		global $html, $Envelope;
+		global $html, $_ENVELOPE;
 		
-		//$var = $Envelope['varname'];
+		//$var = $_ENVELOPE['varname'];
 		//$data = $model['varname2'];
 		//$str = $html->div({ 'style' => "width:50%; margin 100px 25%;", 'id' => 'div_id' }, $var . ': ' . $data};
 
@@ -66,19 +66,25 @@ abstract class View implements \fishStore\Interfaces\iView
 		$out = '';
 		foreach( $dependencies['js'] as $js )
 		{
-			// jQuery won't work here, injecting the tag directly means the </script> tag for the inner script
-			// closes the outer
 			$out .=	"<script>" .
 						"var scr = document.createElement('script');" .
 						"scr.type = 'text/javascript';" .
 						"scr.src = '$js';" .
-						"$( 'head' ).append( scr );" .
+						"var exists = $( 'head script[src=\"$js\"]' );" .
+						"if( exists.length == 0) { $( 'head' ).append( scr ); }" .
 					"</script>";
 		}
 		
 		foreach( $dependencies['css'] as $css)
 		{
-			$out .=	"<script>$( 'head' ).append( $( '<link rel=\"stylesheet\" type=\"text/css\" href=\"$css\" />' ) );</script>";
+			$out .=	"<script>" .
+						"var lnk = document.createElement('link');" .
+						"lnk.type = 'text/css';" .
+						"lnk.rel = 'stylesheet';" .
+						"lnk.href = '$css';" .
+						"var exists = $( 'head link[href=\"$css\"]' );" .
+						"if( exists.length == 0) { $( 'head' ).append( lnk ); }" .
+					"</script>";
 		}
 		return $out;
 	}

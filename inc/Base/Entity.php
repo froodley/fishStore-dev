@@ -16,40 +16,212 @@ namespace fishStore\Base;
  * @copyright  2016
  * @version    Release: 1.3
  */
-abstract class Entity
+abstract class Entity implements \fishStore\Interfaces\iEntity
 {
 	
-	public static function Update( $obj )
+	
+	
+	/**
+	* GetByID
+	*
+	* Retrieve an Entity by its PKID
+	*
+	* @param (string) The class name (not the FQCN) of the Entity
+	* @param (int) The id #
+	* @return (boolean) The result
+	*/
+	public static function GetByID( $class_name, $id )
 	{
 		global $dbh;
 		
-		$pk = $obj->table_info['pk'];
+		$fqcn = "\\fishStore\\Entity\\$class_name";
+		
+		if( !class_exists( $fqcn ) )
+		{
+			LogMessage( "Error: Base\Entity::GetByID - No entity called $class_name exists." );
+			return null;
+		}
+		
+		$ent = new $fqcn();
+		$pk = $ent->table_info['pk'];
+		
+		$res = $dbh->Select( "SELECT * FROM {$ent->table_name} WHERE $pk = ?" , [ $id ] );
+		
+		if( count( $res ) !== 1)
+		{
+			LogMessage( "Error: Base\Entity::GetByID - No $class_name entity with ID# $id was found." );
+			return null;
+		}
+		$row = $res[0];
+		
+		foreach( $ent->table_info as $col => $type )
+		{
+			if( $col == 'pk' )
+				continue;
+			
+			$ent->$col = $row[$col];
+		}
+		
+		return $ent;
+		
+	} // GetByID
+	
+	
+	
+	/**
+	* Commit
+	*
+	* Creates a new entity to the database
+	*
+	* @param (object) The entity to commit 
+	* @return (boolean) The result
+	*/
+	public static function Commit( $ent )
+	{
+		global $dbh;
+		
+		if( !self::Validate( $ent ) )
+			return false;
+		
+		$row = self::ToArray( $ent );
+		
+		return $dbh->Insert( $ent->table_name, $row );
+	} // Commit
+	
+	
+	/**
+	* Update
+	*
+	* Updates an entity in the database
+	*
+	* @param (object) The entity to update 
+	* @return (boolean) The result
+	*/
+	public static function Update( $ent )
+	{
+		global $dbh;
+		
+		$pk = $ent->table_info['pk'];
 		$assignments = [];
-		foreach( $obj->dirty_cols as $prop )
+		foreach( $ent->dirty_cols as $prop )
 		{
 			if ( $prop == $pk ) // Erroneous use of $dirty_cols
 				continue;
 			
-			$assignments[ $prop ] = $obj->$prop;
+			$assignments[ $prop ] = $ent->$prop;
 		}
 		
-		$res = $dbh->Update( $obj->table_name, $assignments, "$pk = ?", [ $obj->$pk ] );
+		$res = $dbh->Update( $ent->table_name, $assignments, "$pk = ?", [ $ent->$pk ] );
 		
 		if( $res )
 		{
-			$obj->dirty_cols = [];
+			$ent->dirty_cols = [];
 			return true;
 		}
 		else
 			return false;
-	}
+	} // Update
 	
-	public function Delete( $obj )
+	
+	/**
+	* Delete
+	*
+	* Deletes an entity from the database
+	*
+	* @param (object) The entity to delete 
+	* @return (boolean) The result
+	*/
+	public static function Delete( $ent )
 	{
 		global $dbh;
 		
-		$pk = $obj->table_info['pk'];
+		$pk = $ent->table_info['pk'];
 		
-		return $dbh->Delete( $obj->table_name, "$pk = ?", [ $obj->$pk ] );
-	}
-}
+		return $dbh->Delete( $ent->table_name, "$pk = ?", [ $ent->$pk ] );
+	} // Delete
+	
+	
+	/**
+	* ToArray
+	*
+	* Parse an Entity into an array
+	*
+	* @param (object) The entity to parse 
+	* @return (array) The Entity as an array
+	*/
+	public static function ToArray( $ent )
+	{
+		$arr = [];
+		foreach( $ent->table_info as $col => $type )
+		{
+			if( $col == 'pk')
+				continue;
+			
+			$val = $ent->$col;
+			if( is_a( $val, 'DateTime' ) )
+			{
+				// Convert to string
+				$val = $val->format('Y-m-d H:i:s');
+			}
+			
+			$arr[$col] = $val;
+		}
+		
+		return $arr;
+	} // ToArray
+	
+	/**
+	* Validate
+	*
+	* Determine whether an Entity's values match the declared data types
+	*
+	* @param (object) The Entity to validate
+	* @return (boolean) The result
+	*/
+	public static function Validate( $ent )
+	{
+		$success = true;
+		
+		foreach( $ent->table_info as $col => $type )
+		{
+			if( $col == 'pk' )
+				continue;
+			
+			$val = $ent->$col;
+			if( is_null( $val ) )
+				continue;
+			
+			switch( $type )
+			{
+				case 'tinyint':
+					$success &= is_bool( $val );
+					break;
+				case 'int':
+					$success &= is_int( $val );
+					break;
+				case 'decimal':
+					$success &= is_numeric( $val );
+					break;
+				case 'varchar':
+				case 'text':
+					$success &= is_string( $val );
+					break;
+				case 'datetime':
+				case 'date':
+					if( is_a( $val, 'DateTime' ) )
+					{
+						$success &= true; // irrelevant, for consistency
+					}
+					elseif( is_string( $val ) )
+					{
+						$date = date_parse( $val );
+						$success &= $date['error_count'] == 0;
+					}
+					break;
+			}
+		}
+		
+		return $success;
+	} // Validate
+	
+} // Entity

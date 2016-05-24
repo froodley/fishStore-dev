@@ -9,15 +9,24 @@ fishStore.Register =
 	
 	Submit: function()
 	{
-		$.ajax( {
-			type: "POST",
-			url: '/Register',
-			data: $("#reg_form").serialize(),
-			success: function( data )
-			{
-				 $('#main').html( data );
-			}
-		} );
+		if( $('#reg_form').valid() )
+		{
+			var fdata = new FormData( $('#reg_form')[0] );
+			$.ajax( {
+				type: "POST",
+				url: '/Register',
+				data: fdata,
+				// Allow file POST
+				contentType: false, // suppress contentType HTTP Header
+				processData: false, // Disable processing, send as BLOB
+				// OnComplete
+				success: function( data )
+				{
+					 $('#main').html( data );
+					 fishStore.Home.CheckLogin();
+				}
+			} );
+		}
 	}
 	
 }; // fishStore.Register
@@ -103,7 +112,7 @@ $(document).ready( function()
 						
 			reg_pass_conf: {
 						required: true,
-						equalTo: '#req_pass'
+						equalTo: '#reg_pass'
 						}
 		},
 		

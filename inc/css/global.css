@@ -20,17 +20,39 @@ a, a:active, a:hover, a:link, a:visited
 	text-decoration: none;
 }
 
+a.error_lnk
+{
+	color: blue !important; /* TODO */
+	text-decoration: underline !important;
+}
+
+hr
+{
+	width: 20%;
+}
+
 .hidden
 {
 	visibility: hidden;
 	display: none;
+	opacity: 0;
+	transition: opacity 5000 ease-in-out;
 }
 
-.required-lbl
+.required_lbl, .error_lbl
 {
 	color: red; /* TODO */
-	font-size: .7em;
 	font-style: italic;
+}
+
+.required_lbl
+{
+	font-size: .7em;
+}
+
+.error_lbl
+{
+	font-size: .9em;
 }
 
 .required:after

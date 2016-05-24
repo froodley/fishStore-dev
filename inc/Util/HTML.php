@@ -11,7 +11,7 @@ define( 'HTML_VOID_TAGS_FN', $GLOBALS['base_path'] . '\\etc\\CSV\\void_tags.csv'
  * HTML
  *
  * HTML tag generator - designed for use with Angular,
- * only allows for HTML5 and ng- attribs
+ * only allows for HTML5, data-, and ng- attribs
  *
  * Tag names with _beg or _end will generate just the beginning or end tag of a set.
  * Neither will use $contents; _beg will use the attribute array provided.
@@ -65,8 +65,11 @@ class HTML
 	/**
 	 * _generateTag
 	 *
-	 * Generates a given HTML tag given its attributes and contents.  Tag names ending with _beg or _end will generate
-	 * only the beginning or end tag in a set.  _beg will use the provided attributes.
+	 * Generates a given HTML tag given its attributes and contents.
+	 * Only allows HTML5 tags and attributes, as well as data- and ng- (Angular) attributes
+	 *
+	 * Tag names ending with _beg or _end will generate only the beginning or end tag in a set.
+	 * _beg will use the provided attributes.
 	 * The tag name nbsp will return an &nbsp;
 	 * The tag name _verbatim will return the contents verbatim inline ( for consistent use of $html ).
 	 * The tag name _comment will return the contents in an HTML comment.
@@ -112,8 +115,12 @@ class HTML
 		$attrib_names = array_keys( $attribs );
 		foreach( $attrib_names as $k )
 		{
-			if( !in_array( $k, self::$allowed_attribs ) && ( strpos( $k, 'ng-' ) !== 0 ) ) // Allow all Angular directives
+			if( !in_array( $k, self::$allowed_attribs ) &&
+				( strpos( $k, 'data-' ) !== 0 ) && // Allow all data- attributes
+				( strpos( $k, 'ng-' ) !== 0 ) ) // Allow all Angular directives
+			{
 				unset( $attribs[$k] );
+			}
 		}
 		
 		// Build attribute string

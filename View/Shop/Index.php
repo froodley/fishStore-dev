@@ -26,7 +26,7 @@ class Index extends \fishStore\Base\View
 	 */
 	public function GetHTML( \fishStore\Base\Model $model = null )
 	{
-		global $html, $Envelope;
+		global $html, $_ENVELOPE;
 		
 		$out = 'Shop';
 		
