@@ -1,0 +1,19 @@
+footer
+{
+	background: pink; /* TODO */
+	border-top: 3px double #AAA;
+}
+	
+
+#copyright
+{
+	display: block;
+	padding-top: 3px;
+	line-height: 1em;
+	width: 100%;
+	
+	text-align: center;
+	font-size: .7em;
+	letter-spacing: .5em;
+	
+}

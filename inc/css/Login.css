@@ -1,4 +1,84 @@
-#login_txt
+/* Layout */
+#login_wrapper
 {
-	font-size: 50px;
+	margin-top: 15%;
+	border: 2px solid #DDD;
+	border-radius: 20px;
+	display: block;
+	margin-left: 30%;
+	width: 350px;
+	padding: 20px;
 }
+
+#login_header
+{
+	display: block;
+	width: 100%;
+	height: 45px;
+	padding-bottom: 15px;
+}
+
+#login_form
+{
+}
+
+#login_form div
+{
+	display: block;
+	padding-bottom: 10px;
+}
+
+#login_form div label
+{
+	float: left;
+	width: 100px;
+	line-height: 1em;
+}
+label.error
+{
+	float: right !important;
+	width: 200px !important;
+}
+
+#login_form div input
+{
+	float: right;
+	width: 200px;
+}
+
+
+/* Header */
+#login_header_lbl
+{
+	float:left;
+	margin-left: 8px;
+	font-size: 30px;
+	
+}
+
+#login_register
+{
+	float: right;
+	font-size: .7em;
+}
+
+#login_register_lnk
+{
+	color: red; /* TODO */
+	text-decoration: underline;
+}
+
+
+/* Button Row */
+#login_button_row
+{
+	width: 100%;
+	padding-top: 15px;
+}
+
+#login_button_row input
+{
+	margin-left: 10px !important;
+	width: 80px !important;
+}
+

@@ -30,7 +30,62 @@ class Index extends \fishStore\Base\View
 		
 		$out = self::InjectDependencies( $Envelope['dependencies'] );
 		
-		$out .= "<span id='login_txt'>Login</span>";
+		$out .= $html->div( [ 'id' => 'login_wrapper' ],
+								$html->div( [ 'id' => 'login_header', 'class' => 'clearfix' ] ,
+											$html->span( [ 'id' => 'login_header_lbl' ],
+														$html->i( [ 'class' => 'fa fa-user' ] ) .
+														'Login'
+													) .
+											$html->span( [ 'id' => 'login_register' ], 'Need to ' .
+														$html->a(	[ 'id' => 'login_register_lnk',
+																	'onclick' => 'fishStore.Link( "/Register" );'
+																	], 'Register?'
+																)
+													)
+								) .
+								$html->form( [ 'id' => 'login_form' ],
+												$html->div( ['id' => 'login_usr_row', 'class' => 'clearfix' ],
+													$html->label( [	'for' => 'login_usr',
+																	'id' => 'login_usr_lbl' ],
+																	'E-Mail:' ) .
+													
+													$html->span( [ 'class' => 'required' ] ) .
+													$html->input( [	'type' => 'email',
+																	'id' => 'login_usr',
+																	'name' => 'login_usr',
+																	'required' => '',
+																	'placeholder' => 'user@domain.com' ]
+																)
+												) .
+												$html->div( ['id' => 'login_pass_row', 'class' => 'clearfix' ],
+													$html->label( [	'for' => 'login_pass',
+																	'id' => 'login_pass_lbl' ],
+																	'Password:' ) .
+													
+													$html->span( [ 'class' => 'required' ] ) .
+													$html->input( [	'type' => 'password',
+																	'id' => 'login_pass',
+																	'name' => 'login_pass',
+																	'required' => '',
+																	'onkeyup' => 'fishStore.ProcessKey( event, "Enter", "fishStore.Login.Submit" );',
+																	'placeholder' => str_repeat( '&bullet;', 20 ) ] )
+												) .
+												$html->div( ['id' => 'login_button_row', 'class' => 'clearfix' ],
+													$html->input( [ 'type' => 'button',
+																	'id' => 'login_submit',
+																	'value' => 'Submit',
+																	'onclick' => 'fishStore.Login.Submit();'] ) .
+													$html->input( [ 'type' => 'button',
+																	'id' => 'login_reset',
+																	'value' => 'Reset',
+																	'onclick' => 'fishStore.Login.Reset();' ] )
+													
+												)
+											)
+						);
+		
+		$out .= $html->script([ 'type' => 'text/javascript' ], "$('#login_form').validate();" );
+		
 		return $out;
 	} // GetHTML
 	

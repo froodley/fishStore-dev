@@ -30,8 +30,6 @@ class Top extends \fishStore\Base\Cell
 				$html->nav_beg( [ 'class' => 'topmenu' ] ) .
 				$html->ul_beg( [ 'id' => 'topmenu_ul' ] );
 		
-		$logged_in = isset( $_SESSION['usr'] ) ? true : false;
-		
 		foreach( $items as $section => $section_arr )
 		{
 			$url = '';
@@ -44,8 +42,13 @@ class Top extends \fishStore\Base\Cell
 					$url = '/Learn';
 					break;
 				case 'Account':
-					$section = $logged_in ? 'My Profile' : 'Login/Register';
-					$url = $logged_in ? '/Profile' : '/Login';
+					$out .= $html->li( [
+								'class' => 'topmenu_section_lbl menu_item hidden',
+								'onclick' => "fishStore.Link( \"/Profile\" );"
+								], 'My Profile' );
+					
+					$section = 'Login/Register';
+					$url = '/Login';
 					break;
 			}
 			
@@ -55,16 +58,6 @@ class Top extends \fishStore\Base\Cell
 								], $section );
 
 			#TODO: Drop-down menus
-			//$out .= $html->ul_beg( [ 'class' => 'topmenu_section_ul' ] );
-			//
-			//foreach( $section_arr as $text => $url )
-			//	$out .= $html->li(	[
-			//							'class' => 'topmenu_subitem menu_item',
-			//							'onclick' => "fishStore.Link( $url );"
-			//						],
-			//						$text);
-			//	
-			//$out .= $html->ul_end();
 		}
 		
 		$out .= $html->ul_end() . $html->nav_end() . $html->div_end();

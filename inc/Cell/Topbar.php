@@ -51,18 +51,22 @@ class Topbar extends \fishStore\Base\Cell
 								) .
 								
 								//Account Controls
-								( !isset( $_SESSION['usr'] ) ? '' :
-									$html->div( [ 'id' => 'account_contr_wrapper' ],
-												$html->a( [ 'id' => 'topbar_profile', 'onclick' => 'fishStore.Link( "/Profile" );' ],
-															$html->i( [ 'class' => 'fa fa-user' ] ) .
-															$html->span( [ 'id' => 'topbar_profile_txt' ],'Profile')
-														) .
-												$html->a( [ 'id' => 'topbar_logout',
-														   'onclick' => "window.location.replace( \"http://{$ini['STORE']['URL']}/Logout\" );" ],
-															$html->i( [ 'class' => 'fa fa-power-off' ] ) .
-															$html->span( [ 'id' => 'topbar_logout_txt' ],'Logout')
-														)
-									)
+								
+								$html->div( [ 'id' => 'account_contr_wrapper', 'class' => 'hidden' ],
+											$html->a( [	'id' => 'topbar_profile',
+														'href' => '#',
+														'onclick' => 'fishStore.Link( "/Profile" );'
+														],
+														$html->i( [ 'class' => 'fa fa-user' ] ) .
+														$html->span( [ 'id' => 'topbar_profile_txt' ],'Profile')
+													) .
+											$html->a( [	'id' => 'topbar_logout',
+														'href' => '#',
+														'onclick' => "window.location.replace( \"http://{$ini['STORE']['URL']}/Logout\" );"
+														],
+														$html->i( [ 'class' => 'fa fa-power-off' ] ) .
+														$html->span( [ 'id' => 'topbar_logout_txt' ],'Logout')
+													)
 								)
 							 
 							 );

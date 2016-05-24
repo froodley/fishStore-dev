@@ -1,0 +1,117 @@
+html,
+body
+{
+	margin: 0px;
+	padding: 0px;
+	height: 100%;
+	font-family: Tahoma, Geneva, sans-serif;
+	line-height: 170%;
+	overflow: hidden;
+}
+
+a
+{
+	cursor: pointer;
+}
+
+a, a:active, a:hover, a:link, a:visited
+{
+	color: #000;
+	text-decoration: none;
+}
+
+.hidden
+{
+	visibility: hidden;
+	display: none;
+}
+
+.required-lbl
+{
+	color: red; /* TODO */
+	font-size: .7em;
+	font-style: italic;
+}
+
+.required:after
+{
+	color: red; /* TODO */
+	content: '*';
+	padding-left: 2px;
+	float: right;
+	
+	/*super*/
+	position: relative;
+	top: -0.7em;
+	font-size: .9em;
+	font-family: monospace;
+}
+
+/* For alignment */
+.not-required:after
+{
+	color: #FFF; /* TODO - Must match bg color */
+	content: '.';
+	padding-left: 2px;
+	float: right;
+	font-size: .9em;
+	font-family: monospace;
+}
+
+
+
+input.error
+{
+	outline: 1px dotted red; /* TODO */
+	line-height: 1.2em;
+}
+
+label.error
+{
+	display: block;
+	clear: both;
+	float: right;
+	line-height: 1.9em;
+	color: red; /* TODO */
+	font-size: .8em;
+	font-style: italic;
+	padding-bottom: 5px;
+	
+}
+
+input[type='button'], .file-upload
+{
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance:none;
+	
+	/* TODO */ All colors here
+	background: #edcc93;
+	background-image: -webkit-linear-gradient(top, #edcc93, #d1a245);
+	background-image: -moz-linear-gradient(top, #edcc93, #d1a245);
+	background-image: -ms-linear-gradient(top, #edcc93, #d1a245);
+	background-image: -o-linear-gradient(top, #edcc93, #d1a245);
+	background-image: linear-gradient(to bottom, #edcc93, #d1a245);
+	
+	-webkit-border-radius: 7;
+	-moz-border-radius: 7;
+	border-radius: 7px;
+	
+	border: 1px solid #DDD;
+	padding: 5px;
+	
+	font-family: Tahoma, Geneva, sans-serif; /* TODO Must remain consistent with site font*/
+	font-size: .9em;
+	text-align: center;
+}
+
+input[type='button']:hover, .file-upload:hover
+{
+	-webkit-appearance:none;
+	background: #f5d585;
+	background-image: -webkit-linear-gradient(top, #f5d585, #d4b25b);
+	background-image: -moz-linear-gradient(top, #f5d585, #d4b25b);
+	background-image: -ms-linear-gradient(top, #f5d585, #d4b25b);
+	background-image: -o-linear-gradient(top, #f5d585, #d4b25b);
+	background-image: linear-gradient(to bottom, #f5d585, #d4b25b);
+}

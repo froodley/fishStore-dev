@@ -29,8 +29,6 @@ class Side extends \fishStore\Base\Cell
 		$out =	$html->nav_beg( [ 'class' => 'sidemenu' ] ) .
 				$html->ul_beg( [ 'id' => 'sidemenu_ul' ] );
 		
-		$logged_in = isset( $_SESSION['usr'] ) ? true : false;
-		
 		foreach( $items as $section => $section_arr )
 		{
 			$out .= $html->li( [ 'class' => 'sidemenu_section_lbl' ], $section );
@@ -38,13 +36,20 @@ class Side extends \fishStore\Base\Cell
 			
 			foreach( $section_arr as $text => $url )
 			{
-				if( $logged_in && $text == 'Login/Register' )
-					continue;
-				if( !$logged_in && $section == 'Account' && $text != 'Login/Register' )
-					continue;
+				$id = substr( $url, 1 ); // trim slash
+				if( strpos( $id, 'Learn?What=' ) === 0 )
+					$id = substr( $id, strlen( 'Learn?What=' ) );
 				
-				$out .= $html->li(	[
-										'class' => 'sidemenu_subitem menu_item',
+				$id = 'mi_' . strtolower( $id );
+				
+				$class = 'sidemenu_subitem menu_item';
+				
+				
+				if( in_array( $id, [ 'mi_profile', 'mi_cart', 'mi_logout' ] ) )
+					$class .= ' hidden';
+				
+				$out .= $html->li(	[	'id'	=> $id,
+										'class' => $class,
 										'onclick' => ( $text != 'Logout' ? "fishStore.Link( \"$url\" );" :
 													  "window.location.replace( \"http://{$ini['STORE']['URL']}{$url}\" );" ),
 									], $text);

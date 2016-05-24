@@ -121,7 +121,10 @@ class HTML
 		
 		foreach( $attribs as $k => $v )
 		{
-			$attrib_str .= "$k='$v' ";
+			if( strlen( $v ) )
+				$attrib_str .= "$k='$v' ";
+			else
+				$attrib_str .= "$k "; // Void attribute
 		}
 		if( strlen( $attrib_str ) )
 			$attrib_str = ' ' . $attrib_str;

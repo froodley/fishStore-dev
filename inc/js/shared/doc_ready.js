@@ -1,7 +1,7 @@
 $(document).ready( function()
 	{
 		// .hover
-		$('.menu_item, a').on( 'mouseenter',
+		$('.menu_item').on( 'mouseenter',
 			function ()
 			{
 				$(this).toggleClass( 'link_hover' );
@@ -13,6 +13,5 @@ $(document).ready( function()
 			}
 		);
 		
-		$('#main').css('background', '/inc/img/oliver.jpg').css('background-opactity', '20%'); /* TODO */
-		alert($('#main').css('background'));
 	} );
+
