@@ -82,7 +82,8 @@ class DBH
 			return false;
 		}
 		
-		$this->_bindParams( $sth, $sql_prms );
+		if( count( $sql_prms ) )
+			$this->_bindParams( $sth, $sql_prms );
 		
 		$sth->execute();
 		
@@ -175,17 +176,20 @@ class DBH
 		$assignments_str = '';
 		$i = 0;
 		$cnt = count($assignments);
+		$assig_prms = [];
 		foreach( $assignments as $k => $v )
 		{
 			$assignments_str .= "$k = ?";
 			$assignments_str .= ( $i < $cnt - 1 ) ? ', ' : '';
-			array_unshift( $where_prms, $v);
+			array_push( $assig_prms, $v);
 			$i++;
 		}
 		
 		$sql = "UPDATE $tbl SET $assignments_str WHERE $where";
 		
-		return $this->_execute( $sql, $where_prms, 'Update' );
+		$prms = array_merge($assig_prms, $where_prms);
+		
+		return $this->_execute( $sql, $prms, 'Update' );
 		
 	} // Update
 	
@@ -268,6 +272,11 @@ class DBH
 	{
 		$bind_prms = [];
 		$prm_types = '';
+		
+		if( !count($args) )
+			return;
+		
+		// Build the param types string
 		for( $i = 0; $i < count( $args ); $i++ )
 		{
 			$arg = $args[$i];

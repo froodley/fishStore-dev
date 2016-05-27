@@ -1,0 +1,47 @@
+/* Admin Menu */
+#admin_menu_wrapper
+{
+	overflow: hidden; /* wraps the floats */
+	background-color: green; /*TODO*/
+	height: 45px !important;
+}
+
+nav.admin_menu
+{
+	display: block;
+	border: 3px outset black; /* TODO */
+	border-bottom: 0px;
+	margin-top: 15px;
+	margin-left: 10%;
+	width: 80%;
+	height: 30px;
+}
+
+#admin_menu_ul
+{
+	margin: 0px;
+	padding: 0px;
+}
+
+#admin_menu_ul li
+{
+	list-style-type: none;
+}
+
+#admin_menu_ul > li
+{
+	float: left;
+	width: 20%;
+	height: 30px;
+	padding-top: 3px;
+	background-color: #004400; /*TODO*/
+	color: white;
+	font-size: 15px;
+	text-align: center;
+}
+
+
+#admin_menu_ul > li.link_hover
+{
+	background-color: yellow !important; /*TODO*/
+}

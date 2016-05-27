@@ -1,19 +1,21 @@
 <?php
 
-namespace fishStore\Base;
+namespace fishStore\Model\admin;
+
 
 /**
- * Model
+ * items
  *
- * The abstract base class for all data models
+ * The model for the Other Items collection
  *
  * @package    fishStore
  * @author     Pete Burkindine <pburkind@gmail.com>
  * @copyright  2016
  * @version    Release: 1.3
  */
-abstract class Model implements \fishStore\Interfaces\iModel
+class items extends \fishStore\Base\Model
 {
+	
 	/*
 	 * __construct
 	 *
@@ -22,9 +24,9 @@ abstract class Model implements \fishStore\Interfaces\iModel
 	 * @param (var) The data needed to create the model
 	 * @return (\fishStore\Base\Model) The model
 	 */
-	abstract public function __construct( $data = null);
-
-} // Model
-
-
-
+	public function __construct( $data = null)
+	{
+		
+	} // __construct
+	
+} // items

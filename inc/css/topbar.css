@@ -103,7 +103,7 @@ header
 #topmenu_wrapper
 {
 	overflow: hidden; /* wraps the floats */
-	background-color: blue; /*TODO*/
+	background-color: #37F; /*TODO*/
 	height: 40px !important;
 }
 
@@ -151,5 +151,5 @@ nav.topmenu
 
 #topmenu_ul > li.link_hover
 {
-	background-color: white !important; /*TODO*/
+	background-color: #00A !important; /*TODO*/
 }

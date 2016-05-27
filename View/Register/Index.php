@@ -185,7 +185,7 @@ class Index extends \fishStore\Base\View
 													$html->input( [ 'type' => 'button',
 																	'id' => 'reg_reset',
 																	'value' => 'Reset',
-																	'onclick' => 'fishStore.Register.Reset();' ] )
+																	'onclick' => 'fishStore.ResetForm( "reg_form" );' ] )
 													
 												)
 											)
@@ -194,6 +194,7 @@ class Index extends \fishStore\Base\View
 		$out .= $html->script([ 'type' => 'text/javascript' ], "$('#login_form').validate();" );
 		
 		return $out;
+	
 	} // GetHTML
 	
 	
@@ -204,7 +205,8 @@ class Index extends \fishStore\Base\View
 			'js' => [ '/View/Register/Register.js' ],
 			'css' => [ '/View/Register/Register.css' ]
 		];
-	}
+		
+	} // GetDependencies
 	
 	
 } // Index

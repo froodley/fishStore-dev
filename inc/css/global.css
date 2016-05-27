@@ -31,6 +31,32 @@ hr
 	width: 20%;
 }
 
+.link_styled
+{
+	color: blue !important;
+	text-decoration: underline !important;
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	
+}
+
+.cell_wrap
+{
+	width:100% !important;
+	height:100% !important;
+}
+
+.chx-yes
+{
+	color: green; /* TODO */
+}
+
+.chx-no
+{
+	color: red; /* TODO */
+}
+
 .hidden
 {
 	visibility: hidden;

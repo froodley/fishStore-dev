@@ -86,7 +86,7 @@ class Index extends \fishStore\Base\View
 													$html->input( [ 'type' => 'button',
 																	'id' => 'login_reset',
 																	'value' => 'Reset',
-																	'onclick' => 'fishStore.Login.Reset();' ] )
+																	'onclick' => 'fishStore.ResetForm( "login_form" );' ] )
 													
 												)
 											)
@@ -95,6 +95,7 @@ class Index extends \fishStore\Base\View
 		$out .= $html->script([ 'type' => 'text/javascript' ], "$('#login_form').validate();" );
 		
 		return $out;
+	
 	} // GetHTML
 	
 	
@@ -105,7 +106,8 @@ class Index extends \fishStore\Base\View
 			'js' => [ '/View/Login/Login.js' ],
 			'css' => [ '/View/Login/Login.css' ]
 		];
-	}
+		
+	} // GetDependencies
 	
 	
 } // Index

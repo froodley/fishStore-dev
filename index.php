@@ -23,8 +23,8 @@ $inc_path = $base_path . '\\inc\\';
 $GLOBALS['base_path'] = $base_path;
 $GLOBALS['inc_path'] = $inc_path;
 
-#TODO: re-enable for production
-//register_shutdown_function( "HandleFatals" );
+
+register_shutdown_function( "HandleFatals" );
 
 spl_autoload_register( function ($fqcn)
 	{

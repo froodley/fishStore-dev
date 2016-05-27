@@ -19,11 +19,11 @@ class ViewFactory
 	*
 	* Creates and returns the view output
 	*
-	* @param (string) Either a view name (if not index) or a Model object
+	* @param (string) Either a view name (default is Index) or a Model object
 	* @param (Model) The Model object associated with the view
 	* @return (string) The output HTML
 	*/
-	public static function Make( $name_or_model = null, fishStore\Model $model = null )
+	public static function Make( $name_or_model = null, \fishStore\Model $model = null )
 	{
 		global $base_path, $internal_error, $ini, $_ENVELOPE;
 		
@@ -31,16 +31,24 @@ class ViewFactory
 		$view_space = self::_getViewSpace();
 		$view_name = 'Index';
 		$view_model = null;
-		if( $name_or_model )
+		if( !is_null( $name_or_model ) )
 		{
 			if( is_string( $name_or_model ) )
 			{
 				$view_name = $name_or_model;
 				$view_model = isset( $model ) ? $model : null;
 			}
-			elseif( is_a( $name_or_vm, 'fishStore\Model' ) )
+			elseif( is_object( $name_or_model ) &&
+				   class_implements( get_class( $name_or_model ), 'fishStore\\Interfaces\\iModel' ) )
 				$view_model = $name_or_model;
+			else
+			{
+				LogMessage( "Warn: ViewFactory.php - Received an invalid parameter: " . $name_or_model );
+			}
 		}
+		
+		if( is_null( $view_model ) && !is_null( $model ) )
+			$view_model = $model;
 		
 		// Check and instantiate View class
 		$class_name = 'fishStore\\View\\' . $view_space . '\\' . $view_name;
@@ -63,8 +71,7 @@ class ViewFactory
 		// Populate the view-specific dependency lists
 		$_ENVELOPE['dependencies'] = $view->GetDependencies();
 		
-		// Return the View
-		return $view->GetHTML( $model );
+		return $view->GetHTML( $view_model );
 	
 	} // Make
 	

@@ -119,8 +119,7 @@ class App
 		if( count( $matches ) > 1 )
 		{
 			LogMessage( "Routing Error: Received an ill-formed query string (too many ?): $orig_req" );
-			exit( sprintf(	$internal_error, $ini['STORE']['NAME'],
-							"RouteParse", $ini['STORE']['E-MAIL'] ) );
+			return self::_goHome();
 		}
 		
 		$request = explode( '/', $request );
@@ -128,8 +127,7 @@ class App
 		if( $cnt > 2 ) #REST: Use $cnt > 3 for non-REST
 		{
 			LogMessage( "Routing Error: Received an ill-formed query string (too many params): $orig_req" );
-			exit( sprintf(	$internal_error, $ini['STORE']['NAME'],
-							"RouteParse", $ini['STORE']['E-MAIL'] ) );
+			return self::_goHome();
 		}
 		
 		
@@ -191,6 +189,12 @@ class App
 			default:
 				break;
 		}
+	
+		// Is this a logout request?
+		if( $controller_name == 'Logout' )
+			self::_logout();
+	
+	
 		
 		// Check for file names
 		if( strpos( $controller_name, '.' )	> -1 ||
@@ -198,14 +202,20 @@ class App
 			$id && strpos( $id, '.' ) 		> -1 )
 		{
 			LogMessage( "Routing Error: Received an ill-formed query string (part contained a period): $orig_req" );
-			exit( sprintf(	$internal_error, $ini['STORE']['NAME'],
-							"RouteParse", $ini['STORE']['E-MAIL'] ) );
+			return self::_goHome();
 		}
+		
+		// Tear apart the query
 		$kvp = [];
 		if( strlen( $query ) )
 		{
-			$query = substr( $query, 1); // Remove the ?
-			$kvp = explode( ';', $query);
+			if( strpos( $query, '?') !== 0 )
+				$kvp = explode( '&', $query);
+			else
+			{
+				$query = substr( $query, 1 );
+				$kvp[] = $query;
+			}
 		}
 			
 		$query = [];
@@ -215,11 +225,6 @@ class App
 			$query[$k] = $v;
 		}
 	
-		// Is this a logout request?
-		if( $controller_name == 'Logout' )
-			self::_logout();
-	
-	
 	
 		// Create and start Controller	
 		$controller_name = "\\fishStore\\Controller\\" . $controller_name;
@@ -227,16 +232,14 @@ class App
 		if( !class_exists( $controller_name ) )
 		{
 			LogMessage( "Routing Error: Controller '$controller_name' does not exist." );
-			exit( sprintf(	$internal_error, $ini['STORE']['NAME'],
-							"RouteParse", $ini['STORE']['E-MAIL'] ) );
+			return self::_goHome();
 		}
 		
 		$implements = class_implements( $controller_name );
 		if( !isset( $implements['fishStore\Interfaces\iController'] ) )
 		{
 			LogMessage( "Routing Error: Controller '$controller_name' must implement \\fishStore\\Interfaces\\iController." );
-			exit( sprintf(	$internal_error, $ini['STORE']['NAME'],
-							"RouteParse", $ini['STORE']['E-MAIL'] ) );
+			return self::_goHome();
 		}
 		
 		
@@ -247,8 +250,7 @@ class App
 		if( !method_exists( $controller, $action_name ) )
 		{
 			LogMessage( "Routing Error: Action '$action_name' does not exist for controller '$controller_name'." );
-			exit( sprintf(	$internal_error, $ini['STORE']['NAME'],
-							"RouteParse", $ini['STORE']['E-MAIL'] ) );
+			return self::_goHome();
 		}
 		
 		if( isset( $id ) && !is_int( $id ) )
@@ -259,6 +261,21 @@ class App
 		
 		print $controller->$action_name( $id, $query );
 	} // _route
+	
+	
+	/*
+	 * _goHome
+	 *
+	 * Re-route poorly-formed and erroneous calls to the home page
+	 * 
+	 */
+	private static function _goHome()
+	{
+		$controller = new \fishStore\Controller\Home();
+		print $controller->GET( null, null );
+		
+	}
+	
 	
 	/**
 	* _validateINI

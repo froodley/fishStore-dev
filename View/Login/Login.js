@@ -12,17 +12,12 @@ fishStore.Login = {
 				success: function( data )
 				{
 					 $('#main').html( data );
-					 fishStore.Home.CheckLogin();
+					 $(document).ready( function() { fishStore.Home.CheckLogin() } );
 				}
 			} );
 		}
-	},
-	
-	Reset: function()
-	{
-		 $('#login_form')[0].reset();
 	}
 	
-	//TODO Center login from JS
+	//TODO Center login wrapper
 	
 };

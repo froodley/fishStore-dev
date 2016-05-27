@@ -20,9 +20,13 @@ class Head extends \fishStore\Base\View
 										'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js',
 										'http://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js',
 										'http://cdn.jsdelivr.net/jquery.validation/1.15.0/additional-methods.min.js',
-										'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js',
+										//'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js', #TODO
+										'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js',
 										JS_PATH . 'global.js',
+										JS_PATH . 'angular.js',
+										JS_PATH . 'directives.js',
 										JS_PATH . 'doc_ready.js',
+										JS_PATH . 'models.js',
 										JS_PATH . 'validators.js'
 									];
 	
@@ -70,7 +74,7 @@ class Head extends \fishStore\Base\View
 		}
 		
 		$out .= $html->head_end();
-		$out .= $html->body_beg() . $html->div_beg( [ 'id' => 'site_wrapper' ] );
+		$out .= $html->body_beg( [ ] ) . $html->div_beg( [ 'id' => 'site_wrapper' ] );
 		
 		return $out;
 	

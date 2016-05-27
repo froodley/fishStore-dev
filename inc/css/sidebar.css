@@ -1,6 +1,6 @@
 #sidebar
 {
-	background-color: yellow; /*TODO*/
+	background-color: white; /*TODO*/
 }
 	
 nav.sidemenu
@@ -28,7 +28,7 @@ nav.sidemenu
 	font-weight: bolder;
 	border-bottom: 1px solid #DDD;
 	border-top: 1px solid #DDD;
-	background: #840; /*TODO*/
+	background: yellow; /*TODO*/
 }
 
 #sidemenu_ul > ul
@@ -43,5 +43,5 @@ nav.sidemenu
 
 #sidemenu_ul > ul > li.link_hover
 {
-	background-color: red; /*TODO*/
+	background-color: orange; /*TODO*/
 }

@@ -2,11 +2,6 @@ var fishStore = fishStore || {};
 
 fishStore.Register =
 {
-	Reset: function()
-	{
-		$('#reg_form')[0].reset();
-	},
-	
 	Submit: function()
 	{
 		if( $('#reg_form').valid() )

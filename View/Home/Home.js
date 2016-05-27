@@ -6,6 +6,7 @@ fishStore.Home =
 	CheckLogin: function( delay = 1000 )
 	{
 		var logged_in = $('#logged_in');
+		
 		if( logged_in.length > 0 )
 		{
 			$('#si_login, #ti_login').addClass('hidden');
@@ -16,8 +17,8 @@ fishStore.Home =
 			
 			$( fade_in ).removeClass( 'hidden' ).fadeOut(0).fadeIn( delay );
 			
-			var is_login = logged_in.attr('data-login-success');
-			var is_reg = logged_in.attr('data-reg-success');
+			var is_login = logged_in.attr('data-is-login') == 1;
+			var is_reg = logged_in.attr('data-is-reg') == 1;
 			
 			if ( is_login || is_reg)
 			{

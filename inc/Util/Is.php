@@ -78,18 +78,8 @@ class Is
 	public static function DateString( $string )
 	{
 		$success = false;
-		
-		//mm-dd-YYYY
-		preg_match( '/^(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])-\d{4}$/', $string, $matches);
-		$success |= count( $matches ) > 0;
-		//dd-mm-YYYY
-		preg_match( '/^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-\d{4}$/', $string, $matches);
-		$success |= count( $matches ) > 0;
-		//YYYY-mm-dd
-		preg_match( '/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/', $string, $matches);
-		$success |= count( $matches ) > 0;
-		
-		return $success;
+		$dttm = date_create( $string );
+		return ( $dttm ) ?: false;
 	}
 	
 	public static function WordString( $string )

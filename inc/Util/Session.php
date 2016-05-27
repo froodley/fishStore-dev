@@ -123,7 +123,7 @@ class Session
 	 *
 	 * @return (null)
 	 */
-	public static function End()
+	public static function End( )
 	{
 		global $dbh;
 		

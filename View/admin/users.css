@@ -1,0 +1,149 @@
+/* Layout */
+
+#app_adm_users_cont
+{
+	margin-top: 30px;
+	border: 2px solid #DDD;
+	border-radius: 20px;
+	display: block;
+	width: 90%;
+	padding: 20px;
+}
+#mdl_adm_users_cont
+{
+	border-radius: 20px;
+	display: block;
+	margin-left: 10px;
+}
+
+
+/* Users Table */
+#tbl_users_table_wrapper
+{
+}
+
+#tbl_users_table
+{
+	font-size: .7em;
+	border: 1px dashed #CCC; /* TODO */
+	border-top: 0px;
+	width: 100%;
+	
+	text-align: left;
+	word-wrap: break-word;
+	
+	border-collapse: collapse;
+}
+
+#tbl_users_tbody
+{
+	
+}
+
+/* Table Header */
+#tbl_users_thr
+{
+	border-bottom: 1px dashed #CCC; /* TODO */
+}
+
+#tbl_users_thr th
+{
+	text-align: center !important;
+	
+	border-left: 1px dashed #CCC; /* TODO */
+	border-right: 1px dashed #CCC; /* TODO */
+}
+
+#tbl_users_hdr0
+{
+	width: 25px;
+}
+#tbl_users_hdr1
+{
+	width: 125px;
+}
+#tbl_users_hdr2
+{
+	width: 80px;
+}
+#tbl_users_hdr3
+{
+	width: 15px;
+}
+#tbl_users_hdr4
+{
+	width: 120px;
+}
+#tbl_users_hdr5
+{
+	width: 30px;
+}
+#tbl_users_hdr6
+{
+	width: 30px;
+}
+
+/* None Row */
+#tbl_users_none_tr
+{
+}
+
+
+#tbl_users_none_tr > td
+{
+	font-style: italic;
+	padding-left: 15px;
+}
+
+#tbl_users_pagination_td
+{
+	text-align: center;
+}
+
+#tbl_users_pagination_td span
+{
+	display: inline-block;
+	width: 20px;
+	size: 1.1em;
+}
+
+#tbl_users_pagination_pg
+{
+	padding: 0px 5px 0px 5px;
+}
+
+/* Table Row */
+.tbl_users_tr
+{
+	border-bottom: 1px dashed #CCC; /* TODO */
+}
+.tbl_users_tr > td
+{
+	border-left: 1px dashed #CCC; /* TODO */
+	border-right: 1px dashed #CCC; /* TODO */
+	
+	padding-left: 4px;
+	
+}
+
+.tbl_users_col0
+{
+	text-align: center !important;
+}
+.tbl_users_col1
+{}
+.tbl_users_col2
+{}
+.tbl_users_col3
+{}
+.tbl_users_col4
+{}
+.tbl_users_col5
+{
+	text-align: center !important;
+}
+.tbl_users_col6
+{
+	text-align: center !important;
+}
+

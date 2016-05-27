@@ -63,6 +63,111 @@ class HTML
 	
 	
 	/**
+	 * BuildTable
+	 *
+	 * Generates an Angular table
+	 *
+	 * @param (string) The collection name within the ng-controller
+	 * @param (array) AA of 'column names' => 'friendly names' to include
+	 * @param (string) The prefix for table part id's
+	 * @param (array) AA of 'column to link' => 'sprintf link format' to link a column using its value
+	 * @param (array) The names of any ng-directives to add to the repeat
+	 * 
+	 * @return (string) The finished table
+	 */
+	public function BuildTable( $collection, $cols, $prefix, $links = null, $directives = null )
+	{
+		$html = $this;
+		
+		$out =	$html->div_beg(		[ 'id' => $prefix . '_table_wrapper' ] ) .
+				$html->table_beg(	[ 'id' => $prefix . '_table' ] ) .
+				$html->tbody_beg(	[ 'id' => $prefix . '_tbody' ] );
+		
+		$internal	= array_keys( $cols );
+		$cnt		= count( $internal );
+		$friendly	= array_values( $cols );
+		
+		// Generate header row
+		$out .= $html->tr_beg( [ 'id' => $prefix . '_thr' ] );
+		
+		$i = 0;
+		foreach( $friendly as $col )
+		{
+			$out .= $html->th( ['id' => $prefix . "_hdr$i"], $col );
+			$i++;
+		}
+		
+		$out .= $html->tr_end();
+		
+		$repeat_prms =[	'ng-repeat' => "ent in $collection  track by \$index", 'class' => $prefix . '_tr' ];
+		if( isset( $directives ) && is_array( $directives ) )
+		{
+			foreach( $directives as $dir )
+				$repeat_prms[$dir] = null;
+		}
+		
+		
+		// Generate row repeater
+		$out .= $html->tr_beg( $repeat_prms );
+		
+		$i = 0;
+		foreach( $internal as $col )
+		{
+			$prms = [ 'class' => $prefix . "_col$i", 'ng-bind' => "ent.$col" ];
+			if( isset( $links[$col] ) )
+				$prms['ng-click'] = $links[$col];
+			
+			$out .= $html->td( $prms, '' );
+			$i++;
+		}
+		
+		$out .= $html->tr_end();
+		
+		// No result row
+		$out .= $html->tr();
+		$out .= $html->tr( [ 'id' => $prefix . '_none_tr', 'ng-hide' => "$collection.length" ],
+							 $html->td( [ 'id' => $prefix . '_none_td', 'colspan' => $cnt ],
+									'No items found.' )
+						 );
+		
+		
+		// The pagination controls
+		
+		$out .= $html->tr_beg( [ 'id' => $prefix . '_pagination_tr' ] ) .
+							 $html->td_beg( [ 'id' => $prefix . '_pagination_td', 'colspan' => $cnt ] ) .
+								$html->span( [ 'id' => $prefix . '_pagination_pg1' ],
+												$html->i( [ 'class' => 'fa fa-angle-double-left' ] )
+								).
+								$html->span( [ 'id' => $prefix . '_pagination_back' ],
+												$html->i( [ 'class' => 'fa fa-angle-left' ] )
+								).
+								$html->span( [ 'id' => $prefix . '_pagination_pg' ],
+												'1'
+								).
+								$html->span( [ 'id' => $prefix . '_pagination_fwd' ],
+												$html->i( [ 'class' => 'fa fa-angle-right' ] )
+								).
+								$html->span( [ 'id' => $prefix . '_pagination_last' ],
+												$html->i( [ 'class' => 'fa fa-angle-double-right' ] )
+								).$html->br().
+								
+								$html->span( [ 'style' => 'font-style: italic; font-size: .8em; width: 200px;' ],
+											"Paginitation is In Progress");
+
+							 $html->td_end() .
+				$html->tr_end();
+		
+		// Close table and return
+		$out .=	$html->tbody_end() . $html->table_end() . $html->div_end();
+		
+		
+		
+		return $out;
+	
+	}
+	
+	
+	/**
 	 * _generateTag
 	 *
 	 * Generates a given HTML tag given its attributes and contents.
@@ -126,9 +231,17 @@ class HTML
 		// Build attribute string
 		$attrib_str = '';
 		
+		if( $tag_name == 'script' && !isset( $attribs[ 'type' ] ) )
+			$attribs[ 'type' ] = 'text/javascript';
+		elseif( $tag_name == 'link' && !isset( $attribs[ 'type' ] ) )
+			$attribs[ 'type' ] = 'text/css';
+			
+		if( $tag_name == 'link' && !isset( $attribs[ 'ref' ] ) )
+			$attribs[ 'rel' ] = 'stylesheet';
+		
 		foreach( $attribs as $k => $v )
 		{
-			if( strlen( $v ) )
+			if( !is_null( $v ) && strlen( $v ) )
 				$attrib_str .= "$k='$v' ";
 			else
 				$attrib_str .= "$k "; // Void attribute

@@ -1,8 +1,8 @@
 Technologies
 
-PHP is from-scratch REST-ful, single-URL MVC architecture with DB-dynamic, encrypted, YAML-driven entity framework.  YAML parser is from-scratch.
+PHP is from-scratch REST-ful, "invisible" single-URL MVC architecture with DB-dynamic, encrypted, YAML-driven entity framework.  YAML parser is from-scratch.
 
-Front end uses generated HTML, Angular for data binding, jQuery and jQuery UI, and vector FontAwesome text icons for minimal graphic downloads
+Front end uses generated HTML, Angular (also using DB-dynamic entities) for data binding, jQuery and jQuery UI, and vector FontAwesome text icons for minimal graphic downloads
 
 MVC
 REST

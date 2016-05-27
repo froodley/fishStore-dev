@@ -28,7 +28,7 @@ class Register extends \fishStore\Base\Controller
 	
 	public function POST( $id )
 	{
-		global $crypto, $_ENVELOPE, $dbh, $base_path, $ini;
+		global $_ENVELOPE, $dbh, $base_path, $ini;
 		
 		#MINOR: This method is leggy, break into pieces?
 		// The other code is going to be just as ugly, 7 params or 50 arrayrefs...
@@ -37,14 +37,14 @@ class Register extends \fishStore\Base\Controller
 		$error = "An internal error occurred while adding your account.  Please contact an <a class='error_lnk' href='mailto:{$ini['STORE']['E-MAIL']}' >administrator</a>.";
 		
 		// Grab handles
-		$fn		= $_POST['reg_fn'] ?: null;
-		$mi		= $_POST['reg_mi'] ?: null;
-		$ln		= $_POST['reg_ln'] ?: null;
-		$email	= $_POST['reg_email'] ?: null;
-		$phone	= $_POST['reg_phone'] ?: null;
-		$bday	= $_POST['reg_bday'] ?: null;
-		$pass	= $_POST['reg_pass'] ?: null;
-		$pass_conf	= $_POST['reg_pass_conf'] ?: null;
+		$fn		= isset( $_POST['reg_fn'] ) ? $_POST['reg_fn'] : null;
+		$mi		= isset( $_POST['reg_mi'] ) ? $_POST['reg_mi'] : null;
+		$ln		= isset( $_POST['reg_ln'] ) ? $_POST['reg_ln'] : null;
+		$email	= isset( $_POST['reg_email'] ) ? $_POST['reg_email'] : null;
+		$phone	= isset( $_POST['reg_phone'] ) ? $_POST['reg_phone'] : null;
+		$bday	= isset( $_POST['reg_bday'] ) ? $_POST['reg_bday'] : null;
+		$pass	= isset( $_POST['reg_pass'] ) ? $_POST['reg_pass'] : null;
+		$pass_conf	= isset( $_POST['reg_pass_conf'] ) ? $_POST['reg_pass_conf'] : null;
 		
 		// Check required fields
 		foreach( [ $fn, $ln, $email, $pass, $pass_conf ] as $k )
@@ -59,6 +59,8 @@ class Register extends \fishStore\Base\Controller
 		// Validate required fields
 		if( $success )
 		{
+			$email = strtolower( $email );
+			
 			$success &= \fishStore\Util\Is::FirstLastName( $fn );
 			$success &= \fishStore\Util\Is::FirstLastName( $ln );
 			$success &= \fishStore\Util\Is::Email( $email );
@@ -66,12 +68,12 @@ class Register extends \fishStore\Base\Controller
 			
 			$success &= ( $pass == $pass_conf );
 			
-			$email = strtolower( $email );
+			if( !$success )
+				$error = 'One or more required fields was filled out incorrectly; please try again.';
 		}
-		if( !$success )
-			$error = 'One or more required fields was filled out incorrectly; please try again.';
 		
 		
+		$bday_dttm = null;
 		 // Clear invalid values in non-required fields
 		if( $success )
 		{
@@ -79,7 +81,7 @@ class Register extends \fishStore\Base\Controller
 				$mi = null;
 			if( !is_null( $phone ) && !\fishStore\Util\Is::USPhone( $phone ) )
 				$phone = null;
-			if( !is_null( $bday ) && !\fishStore\Util\Is::DateString( $bday ) )
+			if( !is_null( $bday ) && !( $bday_dttm = \fishStore\Util\Is::DateString( $bday ) ) )
 				$bday = null;
 		}
 		
@@ -125,7 +127,10 @@ class Register extends \fishStore\Base\Controller
 				$usr->usr_last_name = $ln;
 				$usr->usr_email = $email;
 				$usr->usr_phone = $phone;
-				$usr->usr_birthday = $bday; // No reason to create the Date object
+				
+				if( !is_null( $bday_dttm ) )
+					$usr->usr_birthday = $bday_dttm->format('Y-m-d H:i:s' );
+					
 				$usr->usr_password = md5( $pass );
 				
 				if( $file )

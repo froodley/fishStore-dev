@@ -57,6 +57,7 @@ abstract class View implements \fishStore\Interfaces\iView
 	*/
 	final public static function InjectDependencies( $dependencies )
 	{
+		global $html;
 		if( !is_array( $dependencies ) ||!isset( $dependencies['js'] ) || !isset( $dependencies['css'] ) )
 		{
 			LogMessage( 'Error: View::InjectDependencies did not receive a properly formatted array.' );
@@ -66,25 +67,25 @@ abstract class View implements \fishStore\Interfaces\iView
 		$out = '';
 		foreach( $dependencies['js'] as $js )
 		{
-			$out .=	"<script>" .
+			$out .=	$html->script( [],
 						"var scr = document.createElement('script');" .
 						"scr.type = 'text/javascript';" .
 						"scr.src = '$js';" .
 						"var exists = $( 'head script[src=\"$js\"]' );" .
-						"if( exists.length == 0) { $( 'head' ).append( scr ); }" .
-					"</script>";
+						"if( exists.length == 0) { $( 'head' ).append( scr ); }"
+					);
 		}
 		
 		foreach( $dependencies['css'] as $css)
 		{
-			$out .=	"<script>" .
+			$out .=	$html->script( [],
 						"var lnk = document.createElement('link');" .
 						"lnk.type = 'text/css';" .
 						"lnk.rel = 'stylesheet';" .
 						"lnk.href = '$css';" .
 						"var exists = $( 'head link[href=\"$css\"]' );" .
-						"if( exists.length == 0) { $( 'head' ).append( lnk ); }" .
-					"</script>";
+						"if( exists.length == 0) { $( 'head' ).append( lnk ); }"
+					);
 		}
 		return $out;
 	}

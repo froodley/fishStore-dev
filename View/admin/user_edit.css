@@ -1,0 +1,125 @@
+#user_edit_wrapper
+{
+	margin-top: 30px;
+	border: 2px solid #DDD;
+	border-radius: 20px;
+	display: block;
+	margin-left: 5%;
+	width: 80%;
+	padding: 20px;
+	font-size: .8em;
+}
+
+#usr_edit_form
+{
+	
+}
+
+.usr_edit_col
+{
+	width: 48%;
+}
+
+#usr_edit_col1
+{
+	float: left;
+}
+#usr_edit_col2
+{
+	float: right;
+}
+
+.usr_edit_col div
+{
+	display: block;
+	padding-bottom: 10px;
+}
+
+.usr_edit_col div label
+{
+	float: left;
+	width: 80px;
+	line-height: 1em;
+}
+label.error
+{
+	float: right !important;
+	width: 150px !important;
+}
+
+.usr_edit_col div input
+{
+	float: right;
+	width: 150px;
+	height: 15px;
+}
+
+#usr_edit_chx_row
+{
+}
+
+#usr_edit_chx_row > label,
+#usr_edit_chx_row > input
+{
+	float: right !important;
+	height: 20px;
+	width: auto !important;
+	display: block;
+}
+#usr_edit_chx_row > label
+{
+	margin-top: 5px;
+}
+
+
+
+
+/* Profile Picture*/
+
+#usr_edit_profile_wrapper
+{
+	float: right;
+	width: 110px !important;
+	height: 120px !important;
+	
+	position: relative;
+	margin-right: 8px;
+	
+	border-radius: 20px;
+	border: 3px dotted #DDD;
+}
+
+#usr_edit_profile_preview
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	
+	width: 100px;
+	display: block;
+}
+
+#usr_edit_profile_upload_lbl
+{
+	float: right !important;
+	clear: both;
+	display: block;
+	margin: 8px;
+}
+
+
+/* Button Row */
+#usr_edit_button_row
+{
+	width: 100%;
+	padding-top: 15px;
+}
+
+#usr_edit_reset, #usr_edit_submit
+{
+	float: right;
+	margin-left: 10px;
+	width: 80px !important;
+	height: auto !important;
+}

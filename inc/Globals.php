@@ -84,6 +84,18 @@ $menu_items = [
 				]
 			];
 /**
+ * The array defining the admin menu
+ * @global (array) $admin_menu_items
+ */
+$admin_menu_items = [
+				'Fish'			=> '/admin?view=fish',
+				'Other Items'	=> '/admin?view=items',
+				'Users'			=> '/admin?view=users',
+				'Sales'			=> '/admin?view=sales',
+				'Sessions'		=> '/admin?view=sessions',
+			  ];
+			
+/**
  * Default values for the INI
  * @global (array) $default_ini
  */
@@ -95,7 +107,7 @@ $default_ini =	[
 						'E-MAIL' => 'no-email@fishstore.default',
 						'TIMEZONE' => 'America/Chicago',
 						'URL' => '/',
-						'LOGO' => '/inc/img/store_logo.jpg'
+						'LOGO' => '/inc/img/store_logo.gif'
 					],
 					'DB' =>
 					[
@@ -132,11 +144,25 @@ function LogMessage( $msg )
 	if( !$fh )
 		return; // Nowhere to log to
 	
-	fwrite( $fh, $msg . "\n" );
+	fwrite( $fh, date( 'Y-m-d H:i:s' ) . "\t" .  $msg . "\n" );
 	
 	fclose( $fh );
 	
 } // LogMessage
+
+/**
+* LogBug
+*
+* Wrap LogMessage to make finding left-overs easier
+*
+* @param (string) The message to log
+* @return (null)
+*/
+function LogBug( $msg )
+{
+	LogMessage( $msg );
+	
+} // LogBug
 
 
 /**
@@ -214,6 +240,12 @@ function ArrayToStr( $arr, $str = '', $depth = 0, $is_last = true )
 	$cnt = count( $arr );
 	
 	$i = 0;
+	
+	if( !is_array( $arr ) )
+	{
+		LogMessage( "Error: Non-array passed to ArrayToStr" );
+		return;
+	}
 	
 	foreach( $arr as $k => $v )
 	{

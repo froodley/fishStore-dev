@@ -18,7 +18,7 @@ define( 'YAML_FN', $GLOBALS['base_path'] . '\\etc\\YAML\\db.yaml' );
 class EntityFactory
 {
 	private static $_error_prefix = 'Error - EntityFactory.php :';
-	
+	private static $_js_fh = null;
 	/**
 	* LoadEntities
 	*
@@ -29,7 +29,7 @@ class EntityFactory
 	*/
 	public static function LoadEntities( &$entities )
 	{
-		global $ini;
+		global $ini, $inc_path;
 		
 		$entities = []; // Clear the list
 		
@@ -43,6 +43,8 @@ class EntityFactory
 		$entity_defs = [];
 		\fishStore\Util\YAML::Load( $entity_defs, YAML_FN, $ini['DB']['ENCRYPT_ENTITIES'] );
 		
+		// Clear the JS models
+		self::$_js_fh = \fishStore\Util\File::OpenWrite( $inc_path . '\\js\\models.js', 'EntityFactory' );
 		
 		// Create classes
 		foreach( $entity_defs as $table_name => $members )
@@ -61,6 +63,8 @@ class EntityFactory
 			if( self::_createEntity( $table_name, $class_name, $members ) )
 				$entities[] = $class_name;
 		}
+		
+		fclose( self::$_js_fh );
 		
 		if( !count( $entities ) )
 		{
@@ -85,10 +89,15 @@ class EntityFactory
 	*/
 	private static function _createEntity( $table_name, $class_name, $members )
 	{
+		global $ini;
 		
 		$members_str = ArrayToStr( $members );
 		$create_str =	"namespace fishStore\Entity; class $class_name {" .
 						"public \$table_name = '$table_name'; public \$table_info = $members_str; public \$dirty_cols = [];";
+		
+		$js_model = "function model_$class_name() {";
+		if( !$ini['SETTINGS']['MINIFY'] )
+				$js_model .= "\r\n";
 		
 		foreach( $members as $k => $v )
 		{
@@ -101,9 +110,19 @@ class EntityFactory
 				continue;
 			}
 			
-			$create_str .= " public \${$k} = null;";
+			$create_str	.= " public \${$k} = null;";
+			$js_model	.= " this.$k = '';";
+			if( !$ini['SETTINGS']['MINIFY'] )
+				$js_model .= "\r\n";
 		}
+		$js_model .= '}';
+		if( !$ini['SETTINGS']['MINIFY'] )
+				$js_model .= "\r\n\r\n";
 				
+		$js_model .= "function model_{$class_name}Factory() { return { Create: function(){ return new model_$class_name();} } }";
+		if( !$ini['SETTINGS']['MINIFY'] )
+				$js_model .= "\r\n\r\n";
+		
 		// Code to implement dynamic 'inheritance' functionality
 		$create_str .=	' private static $method_arr = [];' .
 		
@@ -115,12 +134,16 @@ class EntityFactory
 		
 		$create_str .= ' } return true;';
 		
+		// Create the class
 		$res = eval( $create_str );
 		
 		if( !$res )
 			LogMessage( self::$_error_prefix . " Class creation failed for table $class_name." );
 		
 		self::_registerMethods( $class_name );
+		
+		// Create the js model
+		fwrite( self::$_js_fh, $js_model );
 		
 		return $res;
 	} // _createEntity

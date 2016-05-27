@@ -67,6 +67,49 @@ abstract class Entity implements \fishStore\Interfaces\iEntity
 	} // GetByID
 	
 	
+	/*
+	 * CollectionToJSON
+	 *
+	 * Translate an array of Entities into a JSON object
+	 * 
+	 *
+	 * @param (array) The collection of Entities
+	 * @return (string) The JSON
+	 */
+	public static function CollectionToJSON( $coll )
+	{
+		if( !count( $coll ) ) return '{}';
+			
+		$json_coll = [];
+		$tbl_info = $coll[0]->table_info;
+		$pk = $tbl_info['pk'];
+		
+		foreach( $coll as $ent )
+		{
+			$json_ent = [];
+			
+			foreach( $tbl_info as $col => $type )
+			{
+				if( $col == 'pk' || stripos( $col, 'password' ) == true )
+					continue;
+				
+				$json_ent[$col] = $ent->$col;
+			}
+			
+			$json_coll[] = $json_ent;
+		}
+		
+		#TODO - Still working on pagination
+		//$json_coll = [ 'pg' => $pg, 'obj' => $json_coll ];
+		
+		
+		return json_encode( $json_coll );
+		
+	} // CollectionToJSON
+	
+	
+	
+	// General CRUD
 	
 	/**
 	* Commit
@@ -110,7 +153,6 @@ abstract class Entity implements \fishStore\Interfaces\iEntity
 			
 			$assignments[ $prop ] = $ent->$prop;
 		}
-		
 		$res = $dbh->Update( $ent->table_name, $assignments, "$pk = ?", [ $ent->$pk ] );
 		
 		if( $res )
