@@ -2,7 +2,7 @@
 #admin_menu_wrapper
 {
 	overflow: hidden; /* wraps the floats */
-	background-color: green; /*TODO*/
+	background-color: #7C0; /*TODO*/
 	height: 45px !important;
 }
 

@@ -68,10 +68,9 @@ class Index extends \fishStore\Base\View
 	 */
 	public function GetInnerHTML( \fishStore\Base\Model $model = null )
 	{
-		global $_ENVELOPE, $html;
-		
-		$out = 'Home';
-		
+		global $_ENVELOPE, $html, $ini, $inc_path;
+		$out = ''
+		;
 		// Create the login marker
 		if( isset( $_SESSION['usr'] ) )
 		{
@@ -91,6 +90,11 @@ class Index extends \fishStore\Base\View
 									]
 								);
 		}
+		
+		$out .= $html->div_beg( [ 'id' => 'home_img_cont' ] );
+		$out .= $html->img( [ 'src' => '\\inc\\img\\aquarium.jpg', 'id' => 'home_img', 'name' => 'home_img'] );
+		$out .= $html->label( [ 'for' => 'home_img', 'id' => 'home_img_lbl'], "Welcome to {$ini['STORE']['NAME']}" );
+		$out .= $html->div_end();
 		
 		return $out;
 	}

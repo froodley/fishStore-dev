@@ -165,6 +165,11 @@ function LogBug( $msg )
 } // LogBug
 
 
+function GetBoolFromString( $string )
+{
+	return ( $string == 'true' ) ? true : false;
+}
+
 /**
 * GetFML
 *

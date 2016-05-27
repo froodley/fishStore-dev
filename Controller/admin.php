@@ -94,8 +94,9 @@ class admin extends \fishStore\Base\Controller
 		$phone	= isset( $_POST['usr_phone'] ) ? $_POST['usr_phone'] : null;
 		$bday	= isset( $_POST['usr_birthday'] ) ? $_POST['usr_birthday'] : null;
 		$pass	= isset( $_POST['usr_password'] ) ? $_POST['usr_password'] : null;
-		$is_admin		= isset( $_POST['usr_is_admin'] ) ? boolval( $_POST['usr_is_admin'] ) : null;
-		$is_suspended	= isset( $_POST['usr_is_suspended'] ) ? boolval( $_POST['usr_is_suspended'] ) : null;
+		$is_admin		= isset( $_POST['usr_is_admin'] ) ? GetBoolFromString( $_POST['usr_is_admin'] ) : null;
+		$is_suspended	= isset( $_POST['usr_is_suspended'] ) ? GetBoolFromString( $_POST['usr_is_suspended'] ) : null;
+		
 		
 		// Check required fields
 		foreach( [ $id, $fn, $ln, $email ] as $k )

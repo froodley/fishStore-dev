@@ -1,9 +1,29 @@
 #welcome_message
 {
 	display: block;
-	padding-bottom: 30px;
 	padding-left: 15px;
 	font-style: italic;
 	font-size: .9em;
 	color: red; /* TODO */
+}
+
+#home_img_cont
+{
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	margin-left: -50px; /* correct for padding, TODO temporary */
+}
+
+#home_img
+{
+	padding-top: 20px;
+	height: 70%;
+	
+}
+
+#home_img_lbl
+{
+	display: block;
+	
 }
