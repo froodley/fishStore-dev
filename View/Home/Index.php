@@ -92,8 +92,8 @@ class Index extends \fishStore\Base\View
 		}
 		
 		$out .= $html->div_beg( [ 'id' => 'home_img_cont' ] );
-		$out .= $html->img( [ 'src' => '\\inc\\img\\aquarium.jpg', 'id' => 'home_img', 'name' => 'home_img'] );
-		$out .= $html->label( [ 'for' => 'home_img', 'id' => 'home_img_lbl'], "Welcome to {$ini['STORE']['NAME']}" );
+		$out .= $html->img( [ 'src' => '/inc/img/aquarium.jpg', 'id' => 'home_img', 'name' => 'home_img'] );
+		$out .= $html->label( [ 'for' => 'home_img', 'id' => 'home_img_lbl' ], "Welcome to {$ini['STORE']['NAME']}" );
 		$out .= $html->div_end();
 		
 		return $out;

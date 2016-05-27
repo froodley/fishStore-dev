@@ -30,7 +30,7 @@ class App
 		global $base_path, $ini, $html, $crypto, $dbh, $entities, $internal_error;
 		
 		// Get params
-		Util\INI::Load( $ini, $base_path . '\\config.ini' );
+		Util\INI::Load( $ini, $base_path . '/config.ini' );
 		if( !( count( $ini ) ) || !self::_validateINI() )
 		{
 			LogMessage('Error: Could not load INI');
@@ -38,7 +38,6 @@ class App
 		}
 		// Set the correct timezone for the user
 		date_default_timezone_set($ini['STORE']['TIMEZONE']);
-		
 		
 		// Get the HTML generator
 		$html = new Util\HTML();

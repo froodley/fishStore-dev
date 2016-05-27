@@ -147,9 +147,8 @@ class Register extends \fishStore\Base\Controller
 					$usr->usr_id = $usr_id;
 					
 					// Set up the user's profile folder
-					$foldername = str_replace( '@', '_', $email );
-					$user_path = $base_path . "\\profile\\$foldername\\";
-						
+					$foldername = preg_replace( '[@|\.]', '_', $email );
+					$user_path = $base_path . "/profile/$foldername/";
 						
 					// Truncate the folder if it exists
 					if( is_dir( $user_path ) )

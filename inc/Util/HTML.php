@@ -2,10 +2,10 @@
 
 namespace fishStore\Util;
 
-define( 'HTML_ATTRIBS_FN', $GLOBALS['base_path'] . '\\etc\\CSV\\allowed_attribs.csv' );
-define( 'HTML_EVENT_ATTRIBS_FN', $GLOBALS['base_path'] . '\\etc\\CSV\\event_attribs.csv' );
-define( 'HTML_TAGS_FN', $GLOBALS['base_path'] . '\\etc\\CSV\\allowed_tags.csv' );
-define( 'HTML_VOID_TAGS_FN', $GLOBALS['base_path'] . '\\etc\\CSV\\void_tags.csv' );
+define( 'HTML_ATTRIBS_FN', $GLOBALS['base_path'] . '/etc/CSV/allowed_attribs.csv' );
+define( 'HTML_EVENT_ATTRIBS_FN', $GLOBALS['base_path'] . '/etc/CSV/event_attribs.csv' );
+define( 'HTML_TAGS_FN', $GLOBALS['base_path'] . '/etc/CSV/allowed_tags.csv' );
+define( 'HTML_VOID_TAGS_FN', $GLOBALS['base_path'] . '/etc/CSV/void_tags.csv' );
 
 /**
  * HTML

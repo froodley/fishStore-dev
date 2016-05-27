@@ -2,7 +2,7 @@
 
 namespace fishStore\Factory;
 
-define( 'YAML_FN', $GLOBALS['base_path'] . '\\etc\\YAML\\db.yaml' );
+define( 'YAML_FN', $GLOBALS['base_path'] . '/etc/YAML/db.yaml' );
 
 /**
  * EntityFactory
@@ -44,7 +44,7 @@ class EntityFactory
 		\fishStore\Util\YAML::Load( $entity_defs, YAML_FN, $ini['DB']['ENCRYPT_ENTITIES'] );
 		
 		// Clear the JS models
-		self::$_js_fh = \fishStore\Util\File::OpenWrite( $inc_path . '\\js\\models.js', 'EntityFactory' );
+		self::$_js_fh = \fishStore\Util\File::OpenWrite( $inc_path . '/js/models.js', 'EntityFactory' );
 		
 		// Create classes
 		foreach( $entity_defs as $table_name => $members )
@@ -305,7 +305,7 @@ class EntityFactory
 		global $base_path;
 		
 		// Create the tables from SQL
-		$fn = $base_path . '\\etc\\sql\\create_tables.sql';
+		$fn = $base_path . '/etc/sql/create_tables.sql';
 		
 		$fsize = filesize( $fn );
 		if( !file_exists( $fn ) || !$fsize )

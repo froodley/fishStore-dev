@@ -67,7 +67,7 @@ class usersCollection extends \fishStore\Base\Model
 			foreach( $row as $col => $val )
 			{
 				if( $tbl_info[$col] == 'tinyint' )
-					$val = ( $val === 1 ) ? true : false;
+					$val = ( $val == 1 ) ? true : false;
 				
 				$usr->$col = $val;
 			}

@@ -2,7 +2,7 @@
 
 namespace fishStore\Util;
 
-define( 'CRYPTO_FN', $GLOBALS['base_path'] . '\\safe\\crypto.key' );
+define( 'CRYPTO_FN', $GLOBALS['base_path'] . '/safe/crypto.key' );
 /**
  * Crypto
  *

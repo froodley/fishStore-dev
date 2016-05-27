@@ -20,11 +20,13 @@ class admin extends \fishStore\Base\Controller
 		global $_ENVELOPE;
 		$model = null;
 		
-		if( !isset( $_SESSION['usr'] ) || $_SESSION['usr']->usr_is_admin !== 1 )
+		if( !isset( $_SESSION['usr'] ) || $_SESSION['usr']->usr_is_admin != true )
 		{
 			LogMessage( 'Critical Error: Un-authorized attempt to access /admin was blocked.' );
 			$contr = new Home();
-			return $contr->GET( null, null );
+			$query = [];
+			$query['reload'] = 1;
+			return $contr->GET( null, $query );
 		}
 		
 		if( isset( $query['view'] ) )

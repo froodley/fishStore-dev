@@ -9,6 +9,10 @@ fishStore.Angular = {
 		app.factory( 'factory', modelFactory );
 		app.service( 'util', fishStore.Get );
 		
+		app.config(function($logProvider){
+			$logProvider.debugEnabled(true);
+		});
+		
 		angular.bootstrap( $( '#' + containerID ) , [ appName ] );
 		
 		return app;

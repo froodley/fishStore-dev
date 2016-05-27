@@ -140,7 +140,7 @@ function LogMessage( $msg )
 {
 	global $base_path;
 	
-	$fh = fopen( $base_path . '\\etc\\logs\\log_' . date('dmY') . '.log', 'a' );
+	$fh = fopen( $base_path . '/etc/logs/log_' . date('dmY') . '.log', 'a' );
 	if( !$fh )
 		return; // Nowhere to log to
 	
@@ -221,8 +221,10 @@ function HandleFatals()
 	
 	LogMessage( "PHP Error: {$type_str} - File:'{$error['file']}'ln{$error['line']} - {$error['message']}" );
 	
-	exit( sprintf(	$internal_error, ( $ini['STORE'] ? $ini['STORE']['NAME'] : 'The Fish Store' ) ,
-					"General Error #{$error['type']}", ( $ini['STORE'] ? $ini['STORE']['E-MAIL'] : 'no_email@fishstore.default' ) ) );
+	$t = isset($ini['STORE']);
+	
+	exit( sprintf(	$internal_error, ( isset( $ini['STORE'] ) ? $ini['STORE']['NAME'] : 'The Fish Store' ) ,
+					"General Error #{$error['type']}", ( isset( $ini['STORE'] ) ? $ini['STORE']['E-MAIL'] : 'no_email@fishstore.default' ) ) );
 	
 } // HandleFatals
 

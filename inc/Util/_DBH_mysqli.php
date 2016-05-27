@@ -19,6 +19,7 @@ define( 'UNSAFE_ERROR', "SQL Error: The SQL passed was not safe.  No parameters 
  */
 class DBH
 {
+	#TODO: Convert to PDO?
 	
 	private $_dbh = null;
 	
@@ -35,15 +36,11 @@ class DBH
 	*/
 	public function __construct( $server, $user, $pass, $db )
 	{
-		try
+		$this->_dbh = mysqli_connect( $server, $user, $pass, $db );
+		
+		if ( $this->_dbh->connect_errno )
 		{
-			$dbh = $this->_dbh = new \PDO("mysql:host=$server;dbname=$db;charset=utf8mb4", $user, $pass);
-			$dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-			$dbh->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
-		}
-		catch ( \PDOException $e )
-		{
-			LogMessage("SQL Error: Unable to connect.  Error #" . $e->getCode() . ' : ' . $e->getMessage() );
+			LogMessage('Failed SQL conn: ' . $this->_dbh->connect_errno . ' : ' . $this->_dbh->connect_error);
 			return null;
 		}
 		
@@ -65,39 +62,36 @@ class DBH
 		
 		$dbh = $this->_dbh;
 		
+		preg_match( '/FROM\s+(?!tbl_)/', $sql, $unsafe_from );
+		preg_match( '/JOIN\s+(?!tbl_)/', $sql, $unsafe_join );
+		
+		if( !self::CheckSQL( $sql ) || strpos( $sql, 'SELECT' ) !== 0 ||
+		   count( $unsafe_from ) || count( $unsafe_join ) )
+		{
+			LogMessage( strpos( $sql, 'SELECT' ) . ',' . count( $unsafe_from ) . ',' . count( $unsafe_join ) . ',');
+			
+			
+			LogMessage( sprintf( UNSAFE_ERROR, $sql ) );
+			return false;
+		}
+		
+		$sth = $dbh->prepare( $sql );
+		if( !$sth )
+		{
+			LogMessage( sprintf( PREP_ERROR, $sql, $dbh->errno, $dbh->error ) );
+			return false;
+		}
+		
+		if( count( $sql_prms ) )
+			$this->_bindParams( $sth, $sql_prms );
+		
+		$sth->execute();
+		
+		$rs = $sth->get_result();
 		$results = [];
-		try
-		{
-			preg_match( '/FROM\s+(?!tbl_)/', $sql, $unsafe_from );
-			preg_match( '/JOIN\s+(?!tbl_)/', $sql, $unsafe_join );
-			
-			if( !self::CheckSQL( $sql ) || strpos( $sql, 'SELECT' ) !== 0 ||
-			   count( $unsafe_from ) || count( $unsafe_join ) )
-			{
-				LogMessage( strpos( $sql, 'SELECT' ) . ',' . count( $unsafe_from ) . ',' . count( $unsafe_join ) . ',');
-				
-				
-				LogMessage( sprintf( UNSAFE_ERROR, $sql ) );
-				return false;
-			}
-			
-			$sth = $dbh->prepare( $sql );
-			if( !$sth )
-			{
-				LogMessage( sprintf( PREP_ERROR, $sql, $dbh->errno, $dbh->error ) );
-				return false;
-			}
-			
-			$sth->execute( $sql_prms );
-			$results = $sth->fetchAll( \PDO::FETCH_ASSOC );
+		while( $row = $rs->fetch_array(MYSQLI_ASSOC) )
+			array_push( $results, $row );
 
-		}
-		catch ( \PDOException $e )
-		{
-			LogMessage("SQL Error:- Select '$sql' failed: Error #" . $e->getCode() . ' : ' . $e->getMessage() );
-		}
-		
-		
 		return $results;
 	
 	} // Select
@@ -154,7 +148,7 @@ class DBH
 		$sql .= ")";
 		
 		// Execute
-		return ( $this->_execute( $sql, $vals, 'Insert' ) === 1 ) ? $dbh->lastInsertId() : false;
+		return ( $this->_execute( $sql, $vals, 'Insert' ) === 1) ? $dbh->insert_id : false;
 		
 	} // Insert
 	
@@ -239,38 +233,69 @@ class DBH
 	{
 		$dbh = $this->_dbh;
 		
-		try {
-			if( !self::CheckSQL( $sql ) )
-			{
-				LogMessage( sprintf( UNSAFE_ERROR, $sql ) );
-				return false;
-			}
-			
-			$sth = $dbh->prepare( $sql );
-			if( !$sth )
-			{
-				LogMessage( sprintf( PREP_ERROR, $sql, $dbh->errno, $dbh->error ) );
-				return false;
-			}
-			
-			//$this->_bindParams( $sth, $prms );
-			
-			$sth->execute( $prms );
-			$cnt = $sth->rowCount();
-			if ( $cnt == 0 )
-			{
-				LogMessage("SQL Error: $operation failed for '$sql'.  No rows were effected.");
-				return false;
-			}
-			else
-				return $cnt;
-		}
-		catch ( \PDOException $e )
+		if( !self::CheckSQL( $sql ) )
 		{
-			LogMessage("SQL Error: $operation failed for '$sql'. Error #" . $e->getCode() . ' : ' . $e->getMessage() );
-			return null;
+			LogMessage( sprintf( UNSAFE_ERROR, $sql ) );
+			return false;
 		}
+		
+		$sth = $dbh->prepare( $sql );
+		if( !$sth )
+		{
+			LogMessage( sprintf( PREP_ERROR, $sql, $dbh->errno, $dbh->error ) );
+			return false;
+		}
+		
+		$this->_bindParams( $sth, $prms );
+		
+		$res = $sth->execute();
+		if ( $res === false )
+		{
+			LogMessage("SQL Error: $operation failed for '$sql'. Error: #{$sth->errno} - {$sth->error}");
+			return false;
+		}
+		else
+			return $sth->affected_rows;
 	} // _execute
+	
+	
+	/**
+	* _bindParams
+	*
+	* Bind an arbitrary number of values to the params on the statement handle
+	*
+	* @param (object) The statement handle
+	* @param (array) The array of argument values
+	* @return (null)
+	*/
+	private function _bindParams( $sth, $args )
+	{
+		$bind_prms = [];
+		$prm_types = '';
+		
+		if( !count($args) )
+			return;
+		
+		// Build the param types string
+		for( $i = 0; $i < count( $args ); $i++ )
+		{
+			$arg = $args[$i];
+			if( is_int( $arg ) )
+				$prm_types .= 'i';
+			elseif( is_float( $arg ) )
+				$prm_types .= 'd';
+			else
+				$prm_types .= 's';
+			
+			$bind_prms[] = &$args[$i];
+		}
+		
+		array_unshift( $bind_prms, $prm_types );
+		
+		
+		call_user_func_array( array( $sth, 'bind_param' ), $bind_prms );
+		
+	} // _bindParams
 	
 	
 	/**
@@ -338,7 +363,7 @@ class DBH
 	public function __destruct()
 	{
 		if( $this->_dbh )
-			$this->_dbh = null;
+			$this->_dbh->close();
 			
 	} //  __destruct
 	

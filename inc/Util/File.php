@@ -14,7 +14,7 @@ namespace fishStore\Util;
  */
 class File {
 	
-	private static $_err_open = "%s.php could not open file '%s'";
+	private static $_error_open = "%s.php could not open file '%s'";
 	
 	
 	/**

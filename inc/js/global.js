@@ -107,15 +107,18 @@ var fishStore =
 		return ns[func].apply(ns, args);
 	},
 	
-	ToJSON( obj )
+	ToJSON: function( obj )
 	{
 		var json = JSON.stringify( obj );
 		return json;
 	
 	},
 	
-	BoolToChx: function( selector, toggle = false )
+	BoolToChx: function( selector, toggle )
 	{
+		if ( typeof toggle == 'undefined' )
+			toggle = false;
+		
 		$( selector ).each	(
 								function ()
 								{

@@ -21,24 +21,7 @@ class Head extends \fishStore\Base\View
 										'http://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js',
 										'http://cdn.jsdelivr.net/jquery.validation/1.15.0/additional-methods.min.js',
 										//'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js', #TODO
-										'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js',
-										JS_PATH . 'global.js',
-										JS_PATH . 'angular.js',
-										JS_PATH . 'directives.js',
-										JS_PATH . 'doc_ready.js',
-										JS_PATH . 'models.js',
-										JS_PATH . 'validators.js'
-									];
-	
-	private static $_required_css =	[
-										CSS_PATH . 'global.css',
-										CSS_PATH . 'clearfix.css',
-										CSS_PATH . 'layout.css',
-										CSS_PATH . 'menu.css',
-										CSS_PATH . 'sidebar.css',
-										CSS_PATH . 'topbar.css',
-										CSS_PATH . 'footer.css',
-										REQ_PATH . 'font-awesome-4.6.3/css/font-awesome.min.css', // font-awesome's CDN is very slow
+										'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js'
 									];
 	
 	/**
@@ -53,8 +36,28 @@ class Head extends \fishStore\Base\View
 	{
 		global $ini, $html, $_ENVELOPE;
 		
-		$arr_js = array_merge( self::$_required_js, $_ENVELOPE['dependencies']['js'] );
-		$arr_css = array_merge( self::$_required_css, $_ENVELOPE['dependencies']['css'] );
+		$arr_concat_js = [
+							JS_PATH . 'global.js',
+							JS_PATH . 'angular.js',
+							JS_PATH . 'directives.js',
+							JS_PATH . 'doc_ready.js',
+							JS_PATH . 'models.js',
+							JS_PATH . 'validators.js'
+						];
+		
+		$arr_concat_css =	[
+								CSS_PATH . 'global.css',
+								CSS_PATH . 'clearfix.css',
+								CSS_PATH . 'layout.css',
+								CSS_PATH . 'menu.css',
+								CSS_PATH . 'sidebar.css',
+								CSS_PATH . 'topbar.css',
+								CSS_PATH . 'footer.css',
+								REQ_PATH . 'font-awesome-4.6.3/css/font-awesome.min.css', // font-awesome's CDN is very slow
+							];
+		
+		$arr_js = array_merge( self::$_required_js, $arr_concat_js, $_ENVELOPE['dependencies']['js'] );
+		$arr_css = array_merge( $arr_concat_css, $_ENVELOPE['dependencies']['css'] );
 		
 		$out = "<!DOCTYPE html>\n".$html->html_beg() . $html->head_beg();
 		$out .= $html->title([], $_ENVELOPE['title'] );

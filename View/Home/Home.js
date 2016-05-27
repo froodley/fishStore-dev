@@ -3,9 +3,12 @@ var fishStore = fishStore || {};
 fishStore.Home =
 {
 	// If the user is logged in ()
-	CheckLogin: function( delay = 1000 )
+	CheckLogin: function( delay )
 	{
 		var logged_in = $('#logged_in');
+		
+		if ( typeof delay == 'undefined' )
+			delay = 1000;
 		
 		if( logged_in.length > 0 )
 		{
